@@ -8,9 +8,9 @@ public class Reservation {
 	}
 	
 	private int resCode;
-	private Guest g = null;
-	private Room r = null;
-	private Payment p = null;
+	private Guest guest = null;
+	private Room room = null;
+	private Payment payment = null;
 	private Date checkInDate = null;
 	private Date checkOutDate = null;
 	private int noOfAdults;
@@ -23,23 +23,23 @@ public class Reservation {
 	public void setResCode(int resCode) {
 		this.resCode = resCode;
 	}
-	public Guest getG() {
-		return g;
+	public Guest getGuest() {
+		return guest;
 	}
-	public void setG(Guest g) {
-		this.g = g;
+	public void setGuest(Guest g) {
+		this.guest = g;
 	}
-	public Room getR() {
+	public Room getRoom() {
 		return r;
 	}
-	public void setR(Room r) {
-		this.r = r;
+	public void setRoom(Room r) {
+		this.room = r;
 	}
-	public Payment getP() {
-		return p;
+	public Payment getPayment() {
+		return payment;
 	}
-	public void setP(Payment p) {
-		this.p = p;
+	public void setPayment(Payment p) {
+		this.payment = p;
 	}
 	public Date getCheckInDate() {
 		return checkInDate;
