@@ -1,20 +1,20 @@
 package hrps;
 
-enum RoomType{
-	SINGLE,
-	STANDARD,
-	VIP_SUITE,
-	DELUXE
-}
-
-enum AvailabilityStatus{
-	VACANT,
-	OCCUPIED,
-	RESERVED,
-	MAINTENANCE
-}
-
 public class Room {
+	
+	enum RoomType{
+		SINGLE,
+		STANDARD,
+		VIP_SUITE,
+		DELUXE
+	}
+
+	enum AvailabilityStatus{
+		VACANT,
+		OCCUPIED,
+		RESERVED,
+		MAINTENANCE
+	}
 	private String id;
 	private RoomType roomType;
 	private float rate;
