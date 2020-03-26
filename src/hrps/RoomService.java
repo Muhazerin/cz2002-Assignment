@@ -15,22 +15,16 @@ public class RoomService {
 	private MenuItem[] menuItem;
 	
 	private enum orderStatus {
-		Confirmed, Preparing, Delivered; 
+		CONFIRMED, PREPARING, DELIVERED; 
 	}
 	
 	private Date dateTime =  null;
-	
-	private ArrayList<String> listOfOrderTimeDate;
-	
-	private ArrayList<Float> listOfMenuItemCost;
 	
 	private String remarks;
 //	private String roomId;
 	
 	public RoomService() {
 		this.menuItem = new MenuItem[99];
-		this.listOfOrderTimeDate = new ArrayList<String>();
-		this.listOfMenuItemCost = new ArrayList<Float>();
 		this.remarks = "";
 	}
 	
@@ -45,14 +39,12 @@ public class RoomService {
 		this.dateTime = new Date();
 		
 		System.out.println("Room: " + roomId);
-		System.out.println("Ordered: " + menuItem[menuId-1].name );
+		System.out.println("Ordered: " + menuItem[menuId-1].getName());
 		System.out.println("Date/Time: " + dateTime.toString());
 		System.out.println("Remarks: " + rmks);
 		
 		this.remarks = rmks; 
 		//adds the cost of the menu item and date time to a list
-		this.listOfMenuItemCost.add(menuItem[menuId-1].cost);
-		this.listOfOrderTimeDate.add(dateTime.toString());
 	}
 	
 	public void printOrder() {
@@ -61,11 +53,8 @@ public class RoomService {
 	
 	public float getMenuItemsTotalCost() {
 		
-		float sum = 0;
-		for(float i: listOfMenuItemCost) {
-			sum += i;
-		}
-		return sum;
+
+		return 0;
 	}
 	
 }

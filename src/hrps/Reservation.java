@@ -17,6 +17,10 @@ public class Reservation {
 	private int noOfChildren;
 	private ResStatus status;
 	
+	public Reservation() {
+		
+	}
+	
 	public int getResCode() {
 		return resCode;
 	}
@@ -30,7 +34,7 @@ public class Reservation {
 		this.guest = g;
 	}
 	public Room getRoom() {
-		return r;
+		return room;
 	}
 	public void setRoom(Room r) {
 		this.room = r;
