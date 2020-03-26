@@ -1,4 +1,6 @@
 package hrps;
+import java.time.LocalDateTime; // Import the LocalDateTime class
+import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
 
 /**
  * @author      Koh Tong Liang <KOHT0029@e.ntu.edu.sg>
@@ -8,13 +10,17 @@ package hrps;
 class MenuItem 
 {
   /**
- * Unique id for identification. Name and description to describe menuitem
- */
+  * Unique id for identification. Name and description to describe menuitem
+  */
   private String id, name, description;
+  /**
+   * date time variable to store timestamp of the 
+   */
+  private LocalDateTime orderTimestamp;
 
   /**
- * Price variable for each individual menu items
- */
+  * Price variable for each individual menu items
+  */
   private float price;
 
   /**
@@ -22,22 +28,32 @@ class MenuItem
   */
   MenuItem () 
   {
-    id = "";
-    name = "";
-    description = "";
-    price = 0;
+    super();
   } // end of default constructor
 
   /**
-  * Overloaded Constructor to create an instance of MenuItem object.
-  */
+   * Overloaded Constructor to create an instance of MenuItem object.
+   */
   MenuItem (String id, String name, String description, float price)
   {
     this.id = id;
     this.name = name;
     this.description = description;
     this.price = price;
+    this.orderTimestamp = LocalDateTime.now();
   } // end of constructor
+  
+  /**
+   * Overloaded Constructor with additional datetime variable
+   */
+   MenuItem (String id, String name, String description, float pricem, LocalDateTIme orderTimestamp)
+   {
+     this.id = id;
+     this.name = name;
+     this.description = description;
+     this.price = price;
+     this.orderTimestamp = orderTimestamp;
+   } // end of constructor
 
   /**
   * Called by other classes to return id
