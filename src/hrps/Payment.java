@@ -5,7 +5,7 @@ import java.time.temporal.ChronoField;
 import java.time.LocalDate;
 import java.time.Period;
 
-public class Payment extends Reservation{
+public class Payment{
 	private enum PaymentType{
 		CREDITCARD, 
 		CASH;

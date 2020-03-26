@@ -10,6 +10,8 @@ public class Guest {
 	private String nationality;
 	private int contact;
 	
+
+	
 	public Guest(String id, String name, String creditCardDetails, String address, String country, String gender, String nationationality, int contact) {
 		this.id = id;
 		this.name = name;

@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class HRPSApp {
 
@@ -16,7 +17,10 @@ public class HRPSApp {
 //		h. Room Check-out and print bill invoice (with breakdowns on days of stay, room service order items
 //		and its total, tax and total amount)
 		
+		
 			
 	}
+	
+	
 
 }

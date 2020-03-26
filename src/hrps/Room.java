@@ -15,6 +15,14 @@ public class Room {
 		RESERVED,
 		MAINTENANCE
 	}
+	
+	enum BedType{
+		SINGLE,
+		DOUBLE,
+		MASTER
+	}
+	
+	
 	private String id;
 	private RoomType roomType;
 	private float rate;
