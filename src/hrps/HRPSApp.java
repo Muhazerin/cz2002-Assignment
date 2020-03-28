@@ -10,10 +10,12 @@ public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int choice, gChoice;
 		choice = gChoice = -1;
+		String name;
 		
 		do {
 			menu();
 			choice = sc.nextInt();
+			sc.nextLine(); // clear the "\n" in the buffer
 			switch (choice) {
 				case 0:
 					System.out.println("Bye Bye!!");
@@ -22,9 +24,23 @@ public static void main(String[] args) {
 					do {
 						guestMenu();
 						gChoice = sc.nextInt();
+						sc.nextLine(); // clear the "\n" in the buffer
 						switch (gChoice) {
 							case 0:
 								System.out.println("Going back...");
+								break;
+							case 1:
+								guestMgr.addGuest();
+								break;
+							case 2:
+								System.out.print("Enter guest's name: ");
+								name = sc.nextLine();
+								guestMgr.updateGuestDetails(name);
+								break;
+							case 3:
+								System.out.print("Enter guest's name: ");
+								name = sc.nextLine();
+								guestMgr.listGuestDetails(name);
 								break;
 							default:
 								System.out.println("Invalid choice");
@@ -67,13 +83,13 @@ public static void main(String[] args) {
 	}
 
 	public static void guestMenu() {
-		System.out.println("\n+-----------------------------+");
-		System.out.println("| What would you like to do ? |");
-		System.out.println("| 0. Go back                  |");
-		System.out.println("| 1. Create new guest         |");
-		System.out.println("| 2. Update guest details     |");
-		System.out.println("| 3. Search guest details     |");
-		System.out.println("+-----------------------------+");
+		System.out.println("\n+-----------------------------------------+");
+		System.out.println("| What would you like to do ?              |");
+		System.out.println("| 0. Go back                               |");
+		System.out.println("| 1. Create new guest                      |");
+		System.out.println("| 2. Update guest details                  |");
+		System.out.println("| 3. Search for guest and list its details |");
+		System.out.println("+------------------------------------------+");
 		System.out.print("Enter choice: ");
 	}
 	

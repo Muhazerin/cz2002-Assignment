@@ -1,7 +1,7 @@
 package hrps;
 
 public class CreditCard {
-	enum CardType {
+	public enum CardType {
 		MASTER, VISA;
 	}
 	
@@ -13,6 +13,21 @@ public class CreditCard {
 		this.name = name;
 		this.address = address;
 		this.country = country;
+	}
+	
+	public CreditCard(String name, String address, String country, int cType, int cardNo, int cvv, String exp) {
+		this.name = name;
+		this.address = address;
+		this.country = country;
+		this.cardNo = cardNo;
+		if (cType == 1) {
+			this.cType = CardType.MASTER;
+		}
+		else {
+			this.cType = CardType.VISA;
+		}
+		this.cvv = cvv;
+		this.exp = exp;
 	}
 
 	public int getCardNo() {
