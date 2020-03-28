@@ -1,40 +1,41 @@
 package hrps;
 
+import java.util.ArrayList;
+
 public class Room {
 	
-	enum RoomType{
+	public static enum RoomType{
 		SINGLE,
 		STANDARD,
 		VIP_SUITE,
 		DELUXE
 	}
 
-	enum AvailabilityStatus{
+	public static enum AvailabilityStatus{
 		VACANT,
 		OCCUPIED,
 		RESERVED,
 		MAINTENANCE
 	}
 	
-	enum BedType{
+	public static enum BedType{
 		SINGLE,
 		DOUBLE,
 		MASTER
 	}
 	
-	
-	private String id;
+	private int id;
 	private RoomType roomType;
 	private float rate;
-	private String bedType;
+	private BedType bedType;
 	private AvailabilityStatus availabilityStatus;
 	private boolean wifiEnabled;
 	private String facing;
 	private boolean smokingAllowed;
-	private RoomService[] roomService;
+	private ArrayList<RoomService> roomService;
 	private int roomLevel, roomNumber;
 	
-	public Room(String id, RoomType roomType,float rate, String bedType, AvailabilityStatus availabilityStatus, boolean wifiEnabled, String facing, boolean smokingAllowed, RoomService[] roomService) {
+	public Room(int id, RoomType roomType,float rate, BedType bedType, AvailabilityStatus availabilityStatus, boolean wifiEnabled, String facing, boolean smokingAllowed, int roomLevel, int roomNumber) {
 		this.id = id;
 		this.roomType = roomType;
 		this.rate = rate;
@@ -43,8 +44,9 @@ public class Room {
 		this.wifiEnabled = wifiEnabled;
 		this.facing = facing;
 		this.smokingAllowed = smokingAllowed;
-		this.roomService = roomService;
-		
+		this.roomLevel = roomLevel;
+		this.roomNumber = roomNumber;
+		this.roomService = new ArrayList<RoomService>();
 	}
 	
 	public AvailabilityStatus checkRoomAvailability() {
@@ -55,21 +57,10 @@ public class Room {
 		this.setAvailabilityStatus(availStatus);
 	}
 	
-	public float getRoomServicePrice() {
-		float total = 0;
-		for(int i = 0; i < this.roomService.length; i++ ) {
-			//add up the costs of each room service
-			total += this.roomService[i].getMenuItemsTotalCost();
-		}
-		
-		return total;
-	}
-	
-	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public RoomType getRoomType() {
@@ -84,10 +75,10 @@ public class Room {
 	public void setRate(float rate) {
 		this.rate = rate;
 	}
-	public String getBedType() {
+	public BedType getBedType() {
 		return bedType;
 	}
-	public void setBedType(String bedType) {
+	public void setBedType(BedType bedType) {
 		this.bedType = bedType;
 	}
 	public AvailabilityStatus getAvailabilityStatus() {
@@ -114,12 +105,6 @@ public class Room {
 	public void setSmokingAllowed(boolean smokingAllowed) {
 		this.smokingAllowed = smokingAllowed;
 	}
-	public RoomService[] getRoomService() {
-		return roomService;
-	}
-	public void setRoomService(RoomService[] roomService) {
-		this.roomService = roomService;
-	}
 
 	public int getRoomLevel() {
 		return roomLevel;
@@ -135,5 +120,26 @@ public class Room {
 
 	public void setRoomNumber(int roomNumber) {
 		this.roomNumber = roomNumber;
+	}
+	
+	public void addRoomService(RoomService rs) {
+		this.roomService.add(rs);
+	}
+	
+	public ArrayList<RoomService> getRoomService() {
+		return this.roomService;
+	}
+	
+	public float getRoomServicePrice() {
+		float total = 0;
+		for(int i = 0; i < this.roomService.size(); i++ ) {
+			//add up the costs of each room service
+			total += this.roomService.get(i).getMenuItemsTotalCost();
+		}
+		return total;
+	}
+	
+	public void clearRoomService() {
+		this.roomService.clear();
 	}
 }

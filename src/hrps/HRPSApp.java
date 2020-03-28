@@ -4,14 +4,15 @@ import java.util.Scanner;
 
 public class HRPSApp {
 
-public static void main(String[] args) {
+	public static void main(String[] args) {
 		
 		GuestMgr guestMgr = new GuestMgr();
 		MenuItemMgr miMgr = new MenuItemMgr();
+		RoomMgr rMgr = new RoomMgr();
 		
 		Scanner sc = new Scanner(System.in);
-		int choice, gChoice, mChoice;
-		choice = gChoice = mChoice = -1;
+		int choice, gChoice, mChoice, rChoice;
+		choice = gChoice = mChoice = rChoice = -1;
 		String name;
 		
 		do {
@@ -47,6 +48,29 @@ public static void main(String[] args) {
 						}
 					}while (gChoice != 0 && gChoice != 1 && gChoice != 2 && gChoice != 3);
 					break;
+				case 2:
+					do {
+						roomMenu();
+						rChoice = sc.nextInt();
+						sc.nextLine();	// clear the "\n" in the buffer
+						switch (rChoice) {
+							case 0:
+								System.out.println("Going back...");
+								break;
+							case 1:
+								rMgr.addRoom();
+								break;
+							case 2:
+								break;
+							case 3:
+								rMgr.listRoom();
+								break;
+							default:
+								System.out.println("Invalid choice");
+								break;
+						}
+					} while (rChoice != 0 && rChoice != 1 && rChoice != 2 && rChoice != 3);
+					break;
 				case 4:
 					do {
 						menuItemMenu();
@@ -60,15 +84,15 @@ public static void main(String[] args) {
 								miMgr.addMenuItem();
 								break;
 							case 2:
-								miMgr.listMenuItems();
-								break;
-							case 3:
 								System.out.print("Enter menu item name: ");
 								miMgr.updateMenuItem(sc.nextLine());;
 								break;
-							case 4:
+							case 3:
 								System.out.print("Enter menu item name: ");
 								miMgr.removeMenuItem(sc.nextLine());
+								break;
+							case 4:
+								miMgr.listMenuItems();
 								break;
 							default:
 								System.out.println("Invalid choice");
@@ -106,13 +130,14 @@ public static void main(String[] args) {
 		System.out.println("| Welcome to the Hotel Reservation and Payment System |");
 		System.out.println("| 0. Exit the program                                 |");
 		System.out.println("| 1. Create/Update/Search guest details               |");
-		System.out.println("| 4. Create/Update/Remote/List menu items             |");
+		System.out.println("| 2. Create/Update/List room                          |");
+		System.out.println("| 4. Create/Update/Remove/List menu items             |");
 		System.out.println("+-----------------------------------------------------+");
 		System.out.print("Enter choice: ");
 	}
 
 	public static void guestMenu() {
-		System.out.println("\n+-----------------------------------------+");
+		System.out.println("\n+------------------------------------------+");
 		System.out.println("| What would you like to do ?              |");
 		System.out.println("| 0. Go back                               |");
 		System.out.println("| 1. Update guest details                  |");
@@ -122,13 +147,24 @@ public static void main(String[] args) {
 	}
 	
 	public static void menuItemMenu() {
-		System.out.println("\n+-----------------------------------------+");
+		System.out.println("\n+------------------------------------------+");
 		System.out.println("| What would you like to do ?              |");
 		System.out.println("| 0. Go back                               |");
 		System.out.println("| 1. Create new menu item                  |");
-		System.out.println("| 2. List all menu items                   |");
-		System.out.println("| 3. Update menu item                      |");
-		System.out.println("| 4. Remove menu item                      |");
+		System.out.println("| 2. Update menu item                      |");
+		System.out.println("| 3. Remove menu item                      |");
+		System.out.println("| 4. List all menu items                   |");
+		System.out.println("+------------------------------------------+");
+		System.out.print("Enter choice: ");
+	}
+
+	public static void roomMenu() {
+		System.out.println("\n+------------------------------------------+");
+		System.out.println("| What would you like to do ?              |");
+		System.out.println("| 0. Go back                               |");
+		System.out.println("| 1. Create new room                       |");
+		System.out.println("| 2. Update room details                   |");
+		System.out.println("| 3. List Room                             |");
 		System.out.println("+------------------------------------------+");
 		System.out.print("Enter choice: ");
 	}
