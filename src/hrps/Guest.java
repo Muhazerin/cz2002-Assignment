@@ -3,19 +3,17 @@ package hrps;
 public class Guest {
 	private String id;
 	private String name;
-	private String creditCardDetails;
+	private CreditCard creditCard;
 	private String address;
 	private String country;
 	private String gender;
 	private String nationality;
 	private int contact;
 	
-
-	
-	public Guest(String id, String name, String creditCardDetails, String address, String country, String gender, String nationationality, int contact) {
+	public Guest(String id, String name, String address, String country, String gender, String nationality, int contact) {
+		creditCard = new CreditCard(name, address, country);
 		this.id = id;
 		this.name = name;
-		this.creditCardDetails = creditCardDetails;
 		this.address = address;
 		this.country = country;
 		this.gender = gender;
@@ -34,12 +32,6 @@ public class Guest {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getCreditCardDetails() {
-		return creditCardDetails;
-	}
-	public void setCreditCardDetails(String creditCardDetails) {
-		this.creditCardDetails = creditCardDetails;
 	}
 	public String getAddress() {
 		return address;
@@ -70,6 +62,14 @@ public class Guest {
 	}
 	public void setContact(int contact) {
 		this.contact = contact;
+	}
+
+	public CreditCard getCreditCard() {
+		return creditCard;
+	}
+
+	public void setCreditCard(CreditCard creditCard) {
+		this.creditCard = creditCard;
 	}
 	
 	
