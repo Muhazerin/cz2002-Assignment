@@ -6,21 +6,21 @@ import java.util.Scanner;
 
 public class GuestMgr {
 	private ArrayList<Guest> guestList = new ArrayList<Guest>();
-	private String id, name, address, country, gender, nationality;
-	private int contact;
 	
 	public void addGuest() {
+		String id, name, address, country, gender, nationality;
+		int contact;
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter name: ");
 		name = sc.nextLine();
 		System.out.print("Enter ID: ");
 		id = sc.nextLine();
+		System.out.print("Enter gender: ");
+		gender = sc.nextLine();
 		System.out.print("Enter address: ");
 		address = sc.nextLine();
 		System.out.print("Enter country: ");
 		country = sc.nextLine();
-		System.out.print("Enter gender: ");
-		gender = sc.nextLine();
 		System.out.print("Enter nationality: ");
 		nationality = sc.nextLine();
 		System.out.print("Enter contact number: ");
@@ -45,7 +45,7 @@ public class GuestMgr {
 	public void listGuestDetails(String name) {
 		Guest g = searchGuest(name);
 		if (g != null) {
-			System.out.println("Guest Details: ");
+			System.out.println("\nGuest Details: ");
 			System.out.println("\tName: " + g.getName());
 			System.out.println("\tID: " + g.getId());
 			System.out.println("\tGender: " + g.getGender());
