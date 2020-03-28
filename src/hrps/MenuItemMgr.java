@@ -38,7 +38,7 @@ public class MenuItemMgr {
 	}
 	
 	private void showOptions() {
-		System.out.println("+---------------------------------+");
+		System.out.println("\n+---------------------------------+");
 		System.out.println("| What would you like to update ? |");
 		System.out.println("| 1. Name                         |");
 		System.out.println("| 2. Description                  |");
