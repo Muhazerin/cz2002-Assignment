@@ -32,6 +32,7 @@ public class Room {
 	private String facing;
 	private boolean smokingAllowed;
 	private RoomService[] roomService;
+	private int roomLevel, roomNumber;
 	
 	public Room(String id, RoomType roomType,float rate, String bedType, AvailabilityStatus availabilityStatus, boolean wifiEnabled, String facing, boolean smokingAllowed, RoomService[] roomService) {
 		this.id = id;
@@ -110,7 +111,7 @@ public class Room {
 	public boolean getSmokingAllowed() {
 		return smokingAllowed;
 	}
-	public void setSmokingAllowd(boolean smokingAllowed) {
+	public void setSmokingAllowed(boolean smokingAllowed) {
 		this.smokingAllowed = smokingAllowed;
 	}
 	public RoomService[] getRoomService() {
@@ -119,5 +120,20 @@ public class Room {
 	public void setRoomService(RoomService[] roomService) {
 		this.roomService = roomService;
 	}
-	
+
+	public int getRoomLevel() {
+		return roomLevel;
+	}
+
+	public void setRoomLevel(int roomLevel) {
+		this.roomLevel = roomLevel;
+	}
+
+	public int getRoomNumber() {
+		return roomNumber;
+	}
+
+	public void setRoomNumber(int roomNumber) {
+		this.roomNumber = roomNumber;
+	}
 }
