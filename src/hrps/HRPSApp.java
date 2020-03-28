@@ -7,9 +7,11 @@ public class HRPSApp {
 public static void main(String[] args) {
 		
 		GuestMgr guestMgr = new GuestMgr();
+		MenuItemMgr miMgr = new MenuItemMgr();
+		
 		Scanner sc = new Scanner(System.in);
-		int choice, gChoice;
-		choice = gChoice = -1;
+		int choice, gChoice, mChoice;
+		choice = gChoice = mChoice = -1;
 		String name;
 		
 		do {
@@ -30,14 +32,11 @@ public static void main(String[] args) {
 								System.out.println("Going back...");
 								break;
 							case 1:
-								guestMgr.addGuest();
-								break;
-							case 2:
 								System.out.print("Enter guest's name: ");
 								name = sc.nextLine();
 								guestMgr.updateGuestDetails(name);
 								break;
-							case 3:
+							case 2:
 								System.out.print("Enter guest's name: ");
 								name = sc.nextLine();
 								guestMgr.listGuestDetails(name);
@@ -47,6 +46,35 @@ public static void main(String[] args) {
 								break;
 						}
 					}while (gChoice != 0 && gChoice != 1 && gChoice != 2 && gChoice != 3);
+					break;
+				case 4:
+					do {
+						menuItemMenu();
+						mChoice = sc.nextInt();
+						sc.nextLine();	// clear the "\n" in the buffer
+						switch (mChoice) {
+							case 0:
+								System.out.println("Going back...");
+								break;
+							case 1:
+								miMgr.addMenuItem();
+								break;
+							case 2:
+								miMgr.listMenuItems();
+								break;
+							case 3:
+								System.out.print("Enter menu item name: ");
+								miMgr.updateMenuItem(sc.nextLine());;
+								break;
+							case 4:
+								System.out.print("Enter menu item name: ");
+								miMgr.removeMenuItem(sc.nextLine());
+								break;
+							default:
+								System.out.println("Invalid choice");
+								break;
+						}
+					} while (mChoice != 0 && mChoice != 1 && mChoice != 2 && mChoice != 3 && mChoice != 4);
 					break;
 				default:
 					System.out.println("Invalid choice");
@@ -78,6 +106,7 @@ public static void main(String[] args) {
 		System.out.println("| Welcome to the Hotel Reservation and Payment System |");
 		System.out.println("| 0. Exit the program                                 |");
 		System.out.println("| 1. Create/Update/Search guest details               |");
+		System.out.println("| 4. Create/Update/Remote/List menu items             |");
 		System.out.println("+-----------------------------------------------------+");
 		System.out.print("Enter choice: ");
 	}
@@ -86,11 +115,21 @@ public static void main(String[] args) {
 		System.out.println("\n+-----------------------------------------+");
 		System.out.println("| What would you like to do ?              |");
 		System.out.println("| 0. Go back                               |");
-		System.out.println("| 1. Create new guest                      |");
-		System.out.println("| 2. Update guest details                  |");
-		System.out.println("| 3. Search for guest and list its details |");
+		System.out.println("| 1. Update guest details                  |");
+		System.out.println("| 2. Search for guest and list its details |");
 		System.out.println("+------------------------------------------+");
 		System.out.print("Enter choice: ");
 	}
 	
+	public static void menuItemMenu() {
+		System.out.println("\n+-----------------------------------------+");
+		System.out.println("| What would you like to do ?              |");
+		System.out.println("| 0. Go back                               |");
+		System.out.println("| 1. Create new menu item                  |");
+		System.out.println("| 2. List all menu items                   |");
+		System.out.println("| 3. Update menu item                      |");
+		System.out.println("| 4. Remove menu item                      |");
+		System.out.println("+------------------------------------------+");
+		System.out.print("Enter choice: ");
+	}
 }
