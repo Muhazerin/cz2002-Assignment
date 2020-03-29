@@ -69,13 +69,30 @@ public class Reservation {
 	}
 	
 	public void printReceipt() {
-		System.out.println("This is your reservation details.");
+		System.out.println("\nThis is your reservation details.");
 		System.out.println("Reservation Code: " + resCode);
-		System.out.println("Check In Date: " + checkInDate.toString());
+		System.out.println("Reservation Status: " + this.getStatus().toString());
+		System.out.println("\nThis is your room details.");
+		System.out.println("Room: " + String.format("%02d-%02d", room.getRoomLevel(), room.getRoomNumber()));
+		System.out.println("Room Type: " + room.getRoomType().toString());
+		System.out.println("Bed Type: " + room.getBedType().toString());
+		System.out.println("Wifi Enabled: " + boolToString(room.isWifiEnabled()));
+		System.out.println("Smoking Allowed: " + boolToString(room.getSmokingAllowed()));
+		System.out.println("Room rate: $" + room.getRate());
+		System.out.println("\nCheck In Date: " + checkInDate.toString());
 		System.out.println("Your reservation will expire if you fail to arrive after 1 hour of the scheduled check-in date.");
 	}
 	
 	public void checkOut() {
 		System.out.println("Something");
+	}
+	
+	private static String boolToString(boolean bool) {
+		if (bool) {
+			return "Yes";
+		}
+		else {
+			return "No";
+		}
 	}
 }

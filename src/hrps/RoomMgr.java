@@ -469,15 +469,25 @@ public class RoomMgr {
 	 * return the room if vacant
 	 * return false if room not found or not vacant
 	 */
-	public Room isVacant(String room) {
+	public Room isVacant(String room, boolean walkIn) {
 		String[] parts = room.split("-");
 		Room r = validateRoomNumber(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
 		if (Objects.equals(r, null)) {
 			System.out.println("Invalid room");
 		}
-		if (!r.getAvailabilityStatus().equals(Room.AvailabilityStatus.VACANT) ) {
-			r = null;
-			System.out.println("Room is not vacant");
+		else {
+			if (!r.getAvailabilityStatus().equals(Room.AvailabilityStatus.VACANT) ) {
+				r = null;
+				System.out.println("Room is not vacant");
+			}
+			else {
+				if (walkIn) {
+					r.setAvailabilityStatus(Room.AvailabilityStatus.OCCUPIED);
+				}
+				else {
+					r.setAvailabilityStatus(Room.AvailabilityStatus.RESERVED);
+				}
+			}
 		}
 		return r;
 	}

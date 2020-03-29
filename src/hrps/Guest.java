@@ -14,17 +14,18 @@ public class Guest {
 	
 	public Guest(String id, String name, String address, String country, String gender, String nationality, int contact) {
 		Scanner sc = new Scanner(System.in);
-		int cardNo = 0, cvv = 0;
+		long cardNo = 0;
+		int cvv = 0;
 		String exp;
 		CreditCard.CardType cType = selectCardType();
 		
 		System.out.print("Enter card number: ");
-		cardNo = sc.nextInt();
+		cardNo = sc.nextLong();
 		sc.nextLine();	// clear the "\n" in the buffer
 		System.out.print("Enter cvv: ");
 		cvv = sc.nextInt();
 		sc.nextLine();	// clear the "\n" in the buffer
-		System.out.println("Enter expiry date (mm/yy): ");
+		System.out.print("Enter expiry date (mm/yy): ");
 		exp = sc.nextLine();
 		
 		creditCard = new CreditCard(name, address, country, cType, cardNo, cvv, exp);
@@ -89,7 +90,7 @@ public class Guest {
 		this.creditCard = creditCard;
 	}
 	
-	private static CreditCard.CardType selectCardType() {
+	public static CreditCard.CardType selectCardType() {
 		int cChoice = -1;
 		CreditCard.CardType cType = null;
 		Scanner sc = new Scanner(System.in);
@@ -100,7 +101,7 @@ public class Guest {
 			System.out.println("| 1. Mastercard     |");
 			System.out.println("| 2. Visa           |");
 			System.out.println("+-------------------+");
-			System.out.println("Enter choice: ");
+			System.out.print("Enter choice: ");
 			cChoice = sc.nextInt();
 			sc.nextLine();	// clear the "\n" in the buffer
 			switch (cChoice) {

@@ -12,9 +12,7 @@ public class HRPSApp {
 		ReservationMgr resMgr = new ReservationMgr(guestMgr, rMgr);
 		
 		Scanner sc = new Scanner(System.in);
-		int choice, gChoice, mChoice, rChoice;
-		choice = gChoice = mChoice = rChoice = -1;
-		String name;
+		int choice = -1;
 		
 		do {
 			menu();
@@ -25,83 +23,16 @@ public class HRPSApp {
 					System.out.println("Bye Bye!!");
 					break;
 				case 1:
-					do {
-						guestMenu();
-						gChoice = sc.nextInt();
-						sc.nextLine(); // clear the "\n" in the buffer
-						switch (gChoice) {
-							case 0:
-								System.out.println("Going back...");
-								break;
-							case 1:
-								System.out.print("Enter guest's name: ");
-								name = sc.nextLine();
-								guestMgr.updateGuestDetails(name);
-								break;
-							case 2:
-								System.out.print("Enter guest's name: ");
-								name = sc.nextLine();
-								guestMgr.listGuestDetails(name);
-								break;
-							default:
-								System.out.println("Invalid choice");
-								break;
-						}
-					}while (gChoice != 0 && gChoice != 1 && gChoice != 2 && gChoice != 3);
+					guestOption(sc, guestMgr);
 					break;
 				case 2:
-					do {
-						roomMenu();
-						rChoice = sc.nextInt();
-						sc.nextLine();	// clear the "\n" in the buffer
-						switch (rChoice) {
-							case 0:
-								System.out.println("Going back...");
-								break;
-							case 1:
-								rMgr.addRoom();
-								break;
-							case 2:
-								System.out.print("Enter room (level-number): ");
-								rMgr.updateRoom(sc.nextLine());
-								break;
-							case 3:
-								listRoom(rMgr);
-								break;
-							default:
-								System.out.println("Invalid choice");
-								break;
-						}
-					} while (rChoice != 0 && rChoice != 1 && rChoice != 2 && rChoice != 3);
+					roomOption(sc, rMgr);
+					break;
+				case 3:
+					reservationOption(sc, resMgr);
 					break;
 				case 4:
-					do {
-						menuItemMenu();
-						mChoice = sc.nextInt();
-						sc.nextLine();	// clear the "\n" in the buffer
-						switch (mChoice) {
-							case 0:
-								System.out.println("Going back...");
-								break;
-							case 1:
-								miMgr.addMenuItem();
-								break;
-							case 2:
-								System.out.print("Enter menu item name: ");
-								miMgr.updateMenuItem(sc.nextLine());;
-								break;
-							case 3:
-								System.out.print("Enter menu item name: ");
-								miMgr.removeMenuItem(sc.nextLine());
-								break;
-							case 4:
-								miMgr.listMenuItems();
-								break;
-							default:
-								System.out.println("Invalid choice");
-								break;
-						}
-					} while (mChoice != 0 && mChoice != 1 && mChoice != 2 && mChoice != 3 && mChoice != 4);
+					menuOption(sc, miMgr);
 					break;
 				default:
 					System.out.println("Invalid choice");
@@ -151,6 +82,34 @@ public class HRPSApp {
 		System.out.print("Enter choice: ");
 	}
 	
+	private static void guestOption(Scanner sc, GuestMgr guestMgr) {
+		int gChoice = -1;
+		String name;
+		do {
+			guestMenu();
+			gChoice = sc.nextInt();
+			sc.nextLine(); // clear the "\n" in the buffer
+			switch (gChoice) {
+				case 0:
+					System.out.println("Going back...");
+					break;
+				case 1:
+					System.out.print("Search guest's name: ");
+					name = sc.nextLine();
+					guestMgr.updateGuestDetails(name);
+					break;
+				case 2:
+					System.out.print("Search guest's name: ");
+					name = sc.nextLine();
+					guestMgr.listGuestDetails(name);
+					break;
+				default:
+					System.out.println("Invalid choice");
+					break;
+			}
+		}while (gChoice != 0 && gChoice != 1 && gChoice != 2 && gChoice != 3);
+	}
+	
 	private static void menuItemMenu() {
 		System.out.println("\n+------------------------------------------+");
 		System.out.println("| What would you like to do ?              |");
@@ -163,6 +122,38 @@ public class HRPSApp {
 		System.out.print("Enter choice: ");
 	}
 
+	private static void menuOption(Scanner sc, MenuItemMgr miMgr) {
+		int mChoice = -1;
+		
+		do {
+			menuItemMenu();
+			mChoice = sc.nextInt();
+			sc.nextLine();	// clear the "\n" in the buffer
+			switch (mChoice) {
+				case 0:
+					System.out.println("Going back...");
+					break;
+				case 1:
+					miMgr.addMenuItem();
+					break;
+				case 2:
+					System.out.print("Enter menu item name: ");
+					miMgr.updateMenuItem(sc.nextLine());;
+					break;
+				case 3:
+					System.out.print("Enter menu item name: ");
+					miMgr.removeMenuItem(sc.nextLine());
+					break;
+				case 4:
+					miMgr.listMenuItems();
+					break;
+				default:
+					System.out.println("Invalid choice");
+					break;
+			}
+		} while (mChoice != 0 && mChoice != 1 && mChoice != 2 && mChoice != 3 && mChoice != 4);
+	}
+	
 	private static void roomMenu() {
 		System.out.println("\n+------------------------------------------+");
 		System.out.println("| What would you like to do ?              |");
@@ -174,6 +165,34 @@ public class HRPSApp {
 		System.out.print("Enter choice: ");
 	}
 
+	private static void roomOption(Scanner sc, RoomMgr rMgr) {
+		int rChoice = -1;
+		
+		do {
+			roomMenu();
+			rChoice = sc.nextInt();
+			sc.nextLine();	// clear the "\n" in the buffer
+			switch (rChoice) {
+				case 0:
+					System.out.println("Going back...");
+					break;
+				case 1:
+					rMgr.addRoom();
+					break;
+				case 2:
+					System.out.print("Enter room (level-number): ");
+					rMgr.updateRoom(sc.nextLine());
+					break;
+				case 3:
+					listRoom(rMgr);
+					break;
+				default:
+					System.out.println("Invalid choice");
+					break;
+			}
+		} while (rChoice != 0 && rChoice != 1 && rChoice != 2 && rChoice != 3);
+	}
+	
 	private static void listRoomMenu() {
 		System.out.println("\n+--------------------------------+");
 		System.out.println("| Select display type:           |");
@@ -202,5 +221,41 @@ public class HRPSApp {
 					break;
 			}
 		} while (lChoice != 1 && lChoice != 2);
+	}
+
+	private static void reservationMenu() {
+		System.out.println("\n+-------------------------------+");
+		System.out.println("| What would you like to do ?   |");
+		System.out.println("| 0. Go back                    |");
+		System.out.println("| 1. Create reservation         |");
+		System.out.println("| 2. Update reservation detail  |");
+		System.out.println("| 3. Remove reservation         |");
+		System.out.println("| 4. Print a reservation detail |");
+		System.out.println("+-------------------------------+");
+		System.out.print("Enter choice: ");
+	}
+	
+	private static void reservationOption(Scanner sc, ReservationMgr resMgr) {
+		int rChoice = -1;
+		
+		do {
+			reservationMenu();
+			rChoice = sc.nextInt();
+			sc.nextLine();	// clear the "\n" in the buffer
+			switch(rChoice) {
+				case 0:
+					System.out.println("Going back...");
+					break;
+				case 1:
+					resMgr.newReservation();
+					break;
+				case 2:
+					resMgr.updateReservation();
+					break;
+				default:
+					System.out.println("Invalid Choice");
+					break;
+			}
+		} while (rChoice != 0 && rChoice != 1 && rChoice != 2 && rChoice != 3 && rChoice != 4);
 	}
 }

@@ -5,11 +5,12 @@ public class CreditCard {
 		MASTER, VISA;
 	}
 	
-	int cardNo, cvv;
+	long cardNo; 
+	int cvv;
 	CardType cType;
 	String name, address, country, exp;
 		
-	public CreditCard(String name, String address, String country, CreditCard.CardType cType, int cardNo, int cvv, String exp) {
+	public CreditCard(String name, String address, String country, CreditCard.CardType cType, long cardNo, int cvv, String exp) {
 		this.name = name;
 		this.address = address;
 		this.country = country;
@@ -19,11 +20,11 @@ public class CreditCard {
 		this.exp = exp;
 	}
 
-	public int getCardNo() {
+	public long getCardNo() {
 		return cardNo;
 	}
 
-	public void setCardNo(int cardNo) {
+	public void setCardNo(long cardNo) {
 		this.cardNo = cardNo;
 	}
 

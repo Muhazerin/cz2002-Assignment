@@ -20,7 +20,7 @@ public class ReservationMgr {
 	 * return true if walk in
 	 * return false if reservation
 	 */
-	public static boolean selectCheckInType(Scanner sc) {
+	private static boolean selectCheckInType(Scanner sc) {
 		boolean b = false;
 		int bChoice = -1;
 		
@@ -49,6 +49,32 @@ public class ReservationMgr {
 		return b;
 	}
 	
+	private Reservation searchReservation(String name) {
+		Reservation r = null;
+		
+		for (Reservation res : reservationList) {
+			if (res.getGuest().getName().equals(name)) {
+				r = res;
+				break;
+			}
+		}
+		
+		return r;
+	}
+	
+	private Reservation searchReservation(int rLevel, int rNumber) {
+		Reservation r = null;
+		
+		for (Reservation res : reservationList) {
+			if (res.getRoom().getRoomLevel() == rLevel && res.getRoom().getRoomNumber() == rNumber) {
+				r = res;
+				break;
+			}
+		}
+		
+		return r;
+	}
+	
 	public void newReservation() {
 		Reservation r = new Reservation();
 		boolean walkIn = selectCheckInType(sc);
@@ -61,7 +87,7 @@ public class ReservationMgr {
 			r.setStatus(Reservation.ResStatus.CHECKED_IN);
 		}
 		else {
-			System.out.println("Enter date (dd-mm-yyyy): ");
+			System.out.print("Enter date (yyyy-mm-dd): ");
 			r.setCheckInDate(LocalDate.parse(sc.nextLine()));
 			r.setStatus(Reservation.ResStatus.CONFIRMED);
 		}
@@ -72,20 +98,42 @@ public class ReservationMgr {
 		// set room
 		while (Objects.equals(r.getRoom(), null)) {
 			rMgr.listRoomsByOccupancyRate();
-			System.out.println("Enter room (level-number): ");
+			System.out.print("Enter room (level-number): ");
 			room = sc.nextLine();
-			r.setRoom(rMgr.isVacant(room));
+			r.setRoom(rMgr.isVacant(room, walkIn));
 		}
 		
 		// set the no of adults and children
-		System.out.println("Enter no of adults: ");
+		System.out.print("Enter no of adults: ");
 		noOfAdults = sc.nextInt();
 		sc.nextLine();	// clear the "\n" in the buffer
 		r.setNoOfAdults(noOfAdults);
-		System.out.println("Enter no of children: ");
+		System.out.print("Enter no of children: ");
 		noOfChildren = sc.nextInt();
 		sc.nextLine();	// clear the "\n" in the buffer
 		r.setNoOfChildren(noOfChildren);
 		reservationList.add(r);
+		r.printReceipt();
+	}
+
+	public void updateReservation() {
+		String s;
+		Reservation r = null;
+		
+		System.out.print("Enter guest's name or room: ");
+		s = sc.nextLine();
+		if (s.contains("-")) {
+			String[] parts = s.split("-");
+			r = searchReservation(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+		}
+		else {
+			r = searchReservation(s);
+		}
+		if(Objects.equals(r, null)) {
+			System.out.println("Reservation does not exist");
+		}
+		else {
+			System.out.println("Reservation exists");
+		}
 	}
 }
