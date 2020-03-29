@@ -1,6 +1,7 @@
 package hrps;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class RoomMgr {
@@ -46,7 +47,7 @@ public class RoomMgr {
 		}
 	}
 	
-	private float determineRate(Room.RoomType rType, Room.BedType bType) {
+	private static float determineRate(Room.RoomType rType, Room.BedType bType) {
 		if (rType.equals(Room.RoomType.SINGLE)) {
 			if (bType.equals(Room.BedType.SINGLE)) {
 				return 1;
@@ -71,7 +72,7 @@ public class RoomMgr {
 		}
 	}
 	
-	private void roomTypeMenu() {
+	private static void roomTypeMenu() {
 		System.out.println("\n+-------------------+");
 		System.out.println("| Select room type: |");
 		System.out.println("| 1. Single         |");
@@ -82,7 +83,37 @@ public class RoomMgr {
 		System.out.print("Enter choice: ");
 	}
 	
-	private void bedTypeMenu() {
+	private static Room.RoomType selectRoomType() {
+		int rtChoice = -1;
+		Scanner sc = new Scanner(System.in);
+		Room.RoomType rt = null;
+		do {
+			roomTypeMenu();
+			rtChoice = sc.nextInt();
+			sc.nextLine();	// clear the "\n" in the buffer
+			switch(rtChoice) {
+				case 1:
+					rt =  Room.RoomType.SINGLE;
+					break;
+				case 2:
+					rt =  Room.RoomType.STANDARD;
+					break;
+				case 3:
+					rt =  Room.RoomType.VIP_SUITE;
+					break;
+				case 4:
+					rt =  Room.RoomType.DELUXE;
+					break;
+				default:
+					System.out.println("Invalid Choice");
+					break;
+			}
+			
+		} while (rtChoice != 1 && rtChoice != 2 && rtChoice != 3 && rtChoice != 4);
+		return rt;
+	}
+	
+	private static void bedTypeMenu() {
 		System.out.println("\n+------------------+");
 		System.out.println("| Select bed type: |");
 		System.out.println("| 1. Single        |");
@@ -91,90 +122,11 @@ public class RoomMgr {
 		System.out.println("+------------------+");
 		System.out.print("Enter choice: ");
 	}
-	
-	private void availStatusMenu() {
-		System.out.println("\n+-----------------------------+");
-		System.out.println("| Select availability status: |");
-		System.out.println("| 1. Vacant                   |");
-		System.out.println("| 2. Occupied                 |");
-		System.out.println("| 3. Reserved                 |");
-		System.out.println("| 4. Maintenance              |");
-		System.out.println("+-----------------------------+");
-		System.out.print("Enter choice: ");
-	}
-	
-	private void wifiMenu() {
-		System.out.println("\n+----------------+");
-		System.out.println("| Is there wifi: |");
-		System.out.println("| 1. Yes         |");
-		System.out.println("| 2. No          |");
-		System.out.println("+----------------+");
-		System.out.print("Enter choice: ");
-	}
-	
-	private void smokingMenu() {
-		System.out.println("\n+---------------------+");
-		System.out.println("| Is smoking allowed: |");
-		System.out.println("| 1. Yes              |");
-		System.out.println("| 2. No               |");
-		System.out.println("+---------------------+");
-		System.out.print("Enter choice: ");
-	}
-	
-	private boolean validateRoomNumber(int rL, int rN) {
-		boolean valid = true;
-		for (Room r : roomList) {
-			if (r.getRoomLevel() ==  rL && r.getRoomNumber() == rN) {
-				valid = false;
-				break;
-			}
-		}
-		return valid;
-	}
-	
-	private void listRoomMenu() {
-		System.out.println("\n+--------------------------------+");
-		System.out.println("| Select display type:           |");
-		System.out.println("| 1. List all rooms              |");
-		System.out.println("| 2. List Room by occupancy rate |");
-		System.out.println("| 3. List Room by room status    |");
-		System.out.println("+--------------------------------+");
-		System.out.print("Enter choice: ");
-	}
-	
-	public void addRoom() {
+
+	private static Room.BedType selectBedType() {
+		int btChoice = -1;
 		Scanner sc = new Scanner(System.in);
-		int rtChoice = -1, btChoice = -1, asChoice = -1, wChoice = -1, sChoice = -1;
-		Room.RoomType rt = null;
 		Room.BedType bt = null;
-		Room.AvailabilityStatus as = null;
-		boolean wifiEnabled = false, smokingAllowed = false, valid = false;
-		int rLevel = -1, rNumber = -1;
-		
-		do {
-			roomTypeMenu();
-			rtChoice = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
-			switch(rtChoice) {
-				case 1:
-					rt = Room.RoomType.SINGLE;
-					break;
-				case 2:
-					rt = Room.RoomType.STANDARD;
-					break;
-				case 3:
-					rt = Room.RoomType.VIP_SUITE;
-					break;
-				case 4:
-					rt = Room.RoomType.DELUXE;
-					break;
-				default:
-					System.out.println("Invalid Choice");
-					break;
-			}
-			
-		} while (rtChoice != 1 && rtChoice != 2 && rtChoice != 3 && rtChoice != 4);
-	
 		do {
 			bedTypeMenu();
 			btChoice = sc.nextInt();
@@ -194,8 +146,24 @@ public class RoomMgr {
 					break;
 			}
 		} while (btChoice != 1 && btChoice != 2 && btChoice != 3);
+		return bt;
+	}
 	
-		float rate = determineRate(rt, bt);
+	private static void availStatusMenu() {
+		System.out.println("\n+-----------------------------+");
+		System.out.println("| Select availability status: |");
+		System.out.println("| 1. Vacant                   |");
+		System.out.println("| 2. Occupied                 |");
+		System.out.println("| 3. Reserved                 |");
+		System.out.println("| 4. Maintenance              |");
+		System.out.println("+-----------------------------+");
+		System.out.print("Enter choice: ");
+	}
+	
+	private static Room.AvailabilityStatus selectAvailStatus() {
+		int asChoice = -1;
+		Scanner sc = new Scanner(System.in);
+		Room.AvailabilityStatus as = null;
 		
 		do {
 			availStatusMenu();
@@ -220,6 +188,22 @@ public class RoomMgr {
 			}
 			
 		} while (asChoice != 1 && asChoice != 2 && asChoice != 3 && asChoice != 4);
+		return as;
+	}
+	
+	private static void wifiMenu() {
+		System.out.println("\n+----------------+");
+		System.out.println("| Is there wifi: |");
+		System.out.println("| 1. Yes         |");
+		System.out.println("| 2. No          |");
+		System.out.println("+----------------+");
+		System.out.print("Enter choice: ");
+	}
+	
+	private static boolean selectWifiOption() {
+		int wChoice = -1;
+		Scanner sc = new Scanner(System.in);
+		boolean wifiEnabled = false;
 		
 		do {
 			wifiMenu();
@@ -237,6 +221,22 @@ public class RoomMgr {
 					break;
 			}
 		} while (wChoice != 1 && wChoice != 2);
+		return wifiEnabled;
+	}
+	
+	private static void smokingMenu() {
+		System.out.println("\n+---------------------+");
+		System.out.println("| Is smoking allowed: |");
+		System.out.println("| 1. Yes              |");
+		System.out.println("| 2. No               |");
+		System.out.println("+---------------------+");
+		System.out.print("Enter choice: ");
+	}
+	
+	private static boolean selectSmokingOption() {
+		int sChoice = -1;
+		Scanner sc = new Scanner(System.in);
+		boolean smokingAllowed = false;
 		
 		do {
 			smokingMenu();
@@ -254,7 +254,82 @@ public class RoomMgr {
 					break;
 			}
 		} while (sChoice != 1 && sChoice != 2);
+		return smokingAllowed;
+	}
+	
+	private static void listRoomMenu() {
+		System.out.println("\n+--------------------------------+");
+		System.out.println("| Select display type:           |");
+		System.out.println("| 1. List Room by occupancy rate |");
+		System.out.println("| 2. List Room by room status    |");
+		System.out.println("+--------------------------------+");
+		System.out.print("Enter choice: ");
+	}
+	
+	private static void updateRoomMenu() {
+		System.out.println("\n+--------------------------------+");
+		System.out.println("| What would you like to update: |");
+		System.out.println("| 0. Nothing                     |");
+		System.out.println("| 1. Room type                   |");
+		System.out.println("| 2. Bed type                    |");
+		System.out.println("| 3. Room rate                   |");
+		System.out.println("| 4. Availability status         |");
+		System.out.println("| 5. Facing                      |");
+		System.out.println("| 6. Is wifi enabled?            |");
+		System.out.println("| 7. Is smoking allowed?         |");
+		System.out.println("| 8. All                         |");
+		System.out.println("+--------------------------------+");
+		System.out.print("Enter choice: ");
+	}
+
+	private static void printRoomDetails(Room r) {
+		System.out.println("Room id: " + r.getId());
+		System.out.println("Room: " + String.format("%02d-%02d", r.getRoomLevel(), r.getRoomNumber()));
+		System.out.println("Room type: " + r.getRoomType().toString());
+		System.out.println("Bed Type: " + r.getBedType().toString());
+		System.out.println("Room rate: " + r.getRate());
+		System.out.println("Availability Status: " + r.getAvailabilityStatus().toString());
+		System.out.println("Wifi Enabled: " + boolToString(r.isWifiEnabled()));
+		System.out.println("Smoking Allowed: " + boolToString(r.getSmokingAllowed()));
+		System.out.println("Facing: " + r.getFacing());
+	}
+	
+	private static String boolToString(boolean bool) {
+		if (bool) {
+			return "Yes";
+		}
+		else {
+			return "No";
+		}
+	}
+	
+	private Room validateRoomNumber(int rL, int rN) {
+		Room room = null;
+		for (Room r : roomList) {
+			if (r.getRoomLevel() ==  rL && r.getRoomNumber() == rN) {
+				room = r;
+				break;
+			}
+		}
+		return room;
+	}
+	
+	public void addRoom() {
+		Scanner sc = new Scanner(System.in);
+		int wChoice = -1, sChoice = -1;
+		Room.RoomType rt = null;
+		Room.BedType bt = null;
+		Room.AvailabilityStatus as = null;
+		boolean wifiEnabled = false, smokingAllowed = false, valid = false;
+		int rLevel = -1, rNumber = -1;
+		Room r = null;
 		
+		rt = selectRoomType();
+		bt = selectBedType();
+		float rate = determineRate(rt, bt);
+		as = selectAvailStatus();
+		wifiEnabled = selectWifiOption();
+		smokingAllowed = selectSmokingOption();
 		System.out.print("Facing: ");
 		String facing = sc.nextLine();
 		
@@ -266,8 +341,11 @@ public class RoomMgr {
 				System.out.print("Enter room number: ");
 				rNumber = sc.nextInt();
 				sc.nextLine();	// clear the "\n" in the buffer
-				valid = validateRoomNumber(rLevel, rNumber);
-				if (!valid) {
+				r = validateRoomNumber(rLevel, rNumber);
+				if (r.equals(null)) {
+					valid = true;
+				}
+				else {
 					System.out.println("Invalid room number");
 				}
 			}
@@ -280,8 +358,79 @@ public class RoomMgr {
 		counter++;
 	}
 	
-	public void updateRoom() {
-		
+	public void updateRoom(String room) {
+		int uChoice = -1;
+		float rate = 0;
+		Scanner sc = new Scanner(System.in);
+		String[] parts = room.split("-");
+		Room r = validateRoomNumber(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+		if (Objects.equals(r, null)) {
+			System.out.println("Invalid room");
+		}
+		else {
+			do {
+				updateRoomMenu();
+				uChoice = sc.nextInt();
+				sc.nextLine();	// clear the "\n" in the buffer
+				switch (uChoice) {
+					case 0:
+						System.out.println("\nThe new room details are:");
+						printRoomDetails(r);
+						break;
+					case 1:
+						r.setRoomType(selectRoomType());
+						System.out.println("New room type set");
+						break;
+					case 2:
+						r.setBedType(selectBedType());
+						System.out.println("New bed type set");
+						break;
+					case 3:
+						System.out.print("Enter rate: ");
+						rate = sc.nextFloat();
+						sc.nextLine();	// clear the "\n" in the buffer
+						r.setRate(rate);
+						System.out.println("New room rate set");
+						break;
+					case 4:
+						r.setAvailabilityStatus(selectAvailStatus());
+						System.out.println("New availability status set");
+						break;
+					case 5:
+						System.out.print("Enter facing: ");
+						r.setFacing(sc.nextLine());
+						System.out.println("New facing set");
+						break;
+					case 6:
+						r.setWifiEnabled(selectWifiOption());
+						System.out.println("New wifi option set");
+						break;
+					case 7:
+						r.setSmokingAllowed(selectSmokingOption());
+						System.out.println("New smoking option set");
+						break;
+					case 8:
+						r.setRoomType(selectRoomType());
+						r.setBedType(selectBedType());
+						System.out.print("Enter rate: ");
+						rate = sc.nextFloat();
+						sc.nextLine();	// clear the "\n" in the buffer
+						r.setRate(rate);
+						r.setAvailabilityStatus(selectAvailStatus());
+						System.out.print("Enter facing: ");
+						r.setFacing(sc.nextLine());
+						System.out.println("New facing set");
+						r.setWifiEnabled(selectWifiOption());
+						r.setSmokingAllowed(selectSmokingOption());
+						System.out.println("Room updated\n\nThe new room details are:");
+						printRoomDetails(r);
+						break;
+					default:
+						System.out.println("Invalid choice");
+						break;
+				}
+			} while (uChoice != 0 && uChoice != 8);
+		}
 	}
 	
 	public void listRoom() {
@@ -293,43 +442,53 @@ public class RoomMgr {
 			sc.nextLine();	// clear the "\n" in the buffer
 			switch (lChoice) {
 				case 1:
-					listAllRooms();
-					break;
-				case 2:
 					listRoomsByOccupancyRate();
 					break;
-				case 3:
+				case 2:
 					listRoomsByRoomStatus();
 					break;
 				default:
 					System.out.println("Invalid Choice");
 					break;
 			}
-		} while (lChoice != 1 && lChoice != 2 && lChoice != 3);
+		} while (lChoice != 1 && lChoice != 2);
 	}
-	
-	private void listAllRooms() {
-		System.out.println("\nRoom Details:");
-		for (Room r : roomList) {
-			System.out.println("Room id: " + r.getId());
-			System.out.printf("Room: %s-%s\n", String.format("%02d", r.getRoomLevel()), String.format("%02d", r.getRoomNumber()));
-			System.out.println("Room Type: " + r.getRoomType().toString());
-			System.out.println("Bed Type: " + r.getBedType().toString());
-			System.out.println("Room Rate: " + r.getRate());
-			System.out.println("Availability Status: " + r.getAvailabilityStatus().toString());
-			System.out.println("Wifi Enabled: " + r.isWifiEnabled());
-			System.out.println("Smoking Allowed: " + r.getSmokingAllowed());
-			System.out.println("Facing Description: " + r.getFacing());
+
+	private void listRoomsByOccupancyRate() {
+		ArrayList<String> vacantRoom = new ArrayList<String>();
+		int totalRooms = 0;
+		for (Room.RoomType rt : Room.RoomType.values()) {
+			totalRooms = 0;
+			vacantRoom.clear();
+			System.out.print(rt.toString() + ": ");
+			for (Room r : roomList) {
+				if (rt.equals(r.getRoomType())) {
+					if (r.getAvailabilityStatus().equals(Room.AvailabilityStatus.VACANT)) {
+						vacantRoom.add(String.format("%02d-%02d", r.getRoomLevel(), r.getRoomNumber()));
+					}
+					totalRooms++;
+				}
+			}
+			System.out.printf("\tNumber: %d out of %d\n", vacantRoom.size(), totalRooms);
+			System.out.print("\t\tRooms: ");
+			for (String s : vacantRoom) {
+				System.out.print(s + ", ");
+			}
 			System.out.println("");
 		}
 	}
 	
-	private void listRoomsByOccupancyRate() {
-		System.out.println("Something");
-	}
-	
 	private void listRoomsByRoomStatus() {
-		System.out.println("Something");
+		for (Room.AvailabilityStatus as : Room.AvailabilityStatus.values()) {
+			System.out.println(as.toString() + " : ");
+			System.out.print("\tRooms : ");
+			for (Room r : roomList) {
+				if (as.equals(r.getAvailabilityStatus())) {
+					System.out.printf("%s, ", String.format("%02d-%02d", r.getRoomLevel(), r.getRoomNumber()));
+				}
+			}
+			System.out.println("");
+		}
 	}
 	
 }

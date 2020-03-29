@@ -49,14 +49,6 @@ public class Room {
 		this.roomService = new ArrayList<RoomService>();
 	}
 	
-	public AvailabilityStatus checkRoomAvailability() {
-		return this.getAvailabilityStatus();
-	}
-	
-	public void updateRoomAvailability(AvailabilityStatus availStatus) {
-		this.setAvailabilityStatus(availStatus);
-	}
-	
 	public int getId() {
 		return id;
 	}

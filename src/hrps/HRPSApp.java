@@ -61,6 +61,8 @@ public class HRPSApp {
 								rMgr.addRoom();
 								break;
 							case 2:
+								System.out.print("Enter room (level-number): ");
+								rMgr.updateRoom(sc.nextLine());
 								break;
 							case 3:
 								rMgr.listRoom();
@@ -128,8 +130,9 @@ public class HRPSApp {
 	public static void menu() {
 		System.out.println("\n+-----------------------------------------------------+");
 		System.out.println("| Welcome to the Hotel Reservation and Payment System |");
+		System.out.println("| What would you like to do?                          |");
 		System.out.println("| 0. Exit the program                                 |");
-		System.out.println("| 1. Create/Update/Search guest details               |");
+		System.out.println("| 1. Update/Search guest details                      |");
 		System.out.println("| 2. Create/Update/List room                          |");
 		System.out.println("| 4. Create/Update/Remove/List menu items             |");
 		System.out.println("+-----------------------------------------------------+");
