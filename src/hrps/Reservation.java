@@ -1,31 +1,29 @@
 package hrps;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Reservation {
-	enum ResStatus {
+	public static enum ResStatus {
 		CONFIRMED, IN_WAITLIST, CHECKED_IN, EXPIRED, CHECKED_OUT;
 	}
 	
+	private static int counter = 1;
 	private int resCode;
 	private Guest guest = null;
 	private Room room = null;
-	private Payment payment = null;
-	private Date checkInDate = null;
-	private Date checkOutDate = null;
+	private LocalDate checkInDate = null;
+	private LocalDate checkOutDate = null;
 	private int noOfAdults;
 	private int noOfChildren;
 	private ResStatus status;
 	
 	public Reservation() {
-		
+		this.resCode = counter;
+		counter++;
 	}
 	
 	public int getResCode() {
 		return resCode;
-	}
-	public void setResCode(int resCode) {
-		this.resCode = resCode;
 	}
 	public Guest getGuest() {
 		return guest;
@@ -39,22 +37,16 @@ public class Reservation {
 	public void setRoom(Room r) {
 		this.room = r;
 	}
-	public Payment getPayment() {
-		return payment;
-	}
-	public void setPayment(Payment p) {
-		this.payment = p;
-	}
-	public Date getCheckInDate() {
+	public LocalDate getCheckInDate() {
 		return checkInDate;
 	}
-	public void setCheckInDate(Date checkInDate) {
+	public void setCheckInDate(LocalDate checkInDate) {
 		this.checkInDate = checkInDate;
 	}
-	public Date getCheckOutDate() {
+	public LocalDate getCheckOutDate() {
 		return checkOutDate;
 	}
-	public void setCheckOutDate(Date checkOutDate) {
+	public void setCheckOutDate(LocalDate checkOutDate) {
 		this.checkOutDate = checkOutDate;
 	}
 	public int getNoOfAdults() {

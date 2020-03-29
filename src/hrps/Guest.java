@@ -1,5 +1,7 @@
 package hrps;
 
+import java.util.Scanner;
+
 public class Guest {
 	private String id;
 	private String name;
@@ -11,7 +13,22 @@ public class Guest {
 	private int contact;
 	
 	public Guest(String id, String name, String address, String country, String gender, String nationality, int contact) {
-		creditCard = new CreditCard(name, address, country);
+		Scanner sc = new Scanner(System.in);
+		int cardNo = 0, cvv = 0;
+		String exp;
+		CreditCard.CardType cType = selectCardType();
+		
+		System.out.print("Enter card number: ");
+		cardNo = sc.nextInt();
+		sc.nextLine();	// clear the "\n" in the buffer
+		System.out.print("Enter cvv: ");
+		cvv = sc.nextInt();
+		sc.nextLine();	// clear the "\n" in the buffer
+		System.out.println("Enter expiry date (mm/yy): ");
+		exp = sc.nextLine();
+		
+		creditCard = new CreditCard(name, address, country, cType, cardNo, cvv, exp);
+		
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -72,7 +89,32 @@ public class Guest {
 		this.creditCard = creditCard;
 	}
 	
-	
-	
-	
+	private static CreditCard.CardType selectCardType() {
+		int cChoice = -1;
+		CreditCard.CardType cType = null;
+		Scanner sc = new Scanner(System.in);
+		
+		do {
+			System.out.println("\n+-------------------+");
+			System.out.println("| Select card type: |");
+			System.out.println("| 1. Mastercard     |");
+			System.out.println("| 2. Visa           |");
+			System.out.println("+-------------------+");
+			System.out.println("Enter choice: ");
+			cChoice = sc.nextInt();
+			sc.nextLine();	// clear the "\n" in the buffer
+			switch (cChoice) {
+				case 1:
+					cType = CreditCard.CardType.MASTER;
+					break;
+				case 2:
+					cType = CreditCard.CardType.VISA;
+					break;
+				default:
+					System.out.println("Invalid Choice");
+					break;
+			}
+		} while (cChoice != 1 && cChoice != 2);
+		return cType;
+	}
 }

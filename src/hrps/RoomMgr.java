@@ -257,15 +257,6 @@ public class RoomMgr {
 		return smokingAllowed;
 	}
 	
-	private static void listRoomMenu() {
-		System.out.println("\n+--------------------------------+");
-		System.out.println("| Select display type:           |");
-		System.out.println("| 1. List Room by occupancy rate |");
-		System.out.println("| 2. List Room by room status    |");
-		System.out.println("+--------------------------------+");
-		System.out.print("Enter choice: ");
-	}
-	
 	private static void updateRoomMenu() {
 		System.out.println("\n+--------------------------------+");
 		System.out.println("| What would you like to update: |");
@@ -303,6 +294,10 @@ public class RoomMgr {
 		}
 	}
 	
+	/*
+	 * return the room if room is found
+	 * return null if room is not found
+	 */
 	private Room validateRoomNumber(int rL, int rN) {
 		Room room = null;
 		for (Room r : roomList) {
@@ -433,28 +428,7 @@ public class RoomMgr {
 		}
 	}
 	
-	public void listRoom() {
-		int lChoice = -1;
-		Scanner sc = new Scanner(System.in);
-		do {
-			listRoomMenu();
-			lChoice = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
-			switch (lChoice) {
-				case 1:
-					listRoomsByOccupancyRate();
-					break;
-				case 2:
-					listRoomsByRoomStatus();
-					break;
-				default:
-					System.out.println("Invalid Choice");
-					break;
-			}
-		} while (lChoice != 1 && lChoice != 2);
-	}
-
-	private void listRoomsByOccupancyRate() {
+	public void listRoomsByOccupancyRate() {
 		ArrayList<String> vacantRoom = new ArrayList<String>();
 		int totalRooms = 0;
 		for (Room.RoomType rt : Room.RoomType.values()) {
@@ -478,7 +452,7 @@ public class RoomMgr {
 		}
 	}
 	
-	private void listRoomsByRoomStatus() {
+	public void listRoomsByRoomStatus() {
 		for (Room.AvailabilityStatus as : Room.AvailabilityStatus.values()) {
 			System.out.println(as.toString() + " : ");
 			System.out.print("\tRooms : ");
@@ -491,4 +465,20 @@ public class RoomMgr {
 		}
 	}
 	
+	/*
+	 * return the room if vacant
+	 * return false if room not found or not vacant
+	 */
+	public Room isVacant(String room) {
+		String[] parts = room.split("-");
+		Room r = validateRoomNumber(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+		if (Objects.equals(r, null)) {
+			System.out.println("Invalid room");
+		}
+		if (!r.getAvailabilityStatus().equals(Room.AvailabilityStatus.VACANT) ) {
+			r = null;
+			System.out.println("Room is not vacant");
+		}
+		return r;
+	}
 }

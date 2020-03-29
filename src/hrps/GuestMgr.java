@@ -7,7 +7,13 @@ import java.util.Scanner;
 public class GuestMgr {
 	private ArrayList<Guest> guestList = new ArrayList<Guest>();
 	
-	public void addGuest() {
+	public void addGuest(Guest g) {
+		guestList.add(g);
+		System.out.println("Guest Added");
+	}
+	
+	public Guest addGuest() {
+		Guest g = null;
 		String id, name, address, country, gender, nationality;
 		int contact;
 		Scanner sc = new Scanner(System.in);
@@ -26,8 +32,10 @@ public class GuestMgr {
 		System.out.print("Enter contact number: ");
 		contact = sc.nextInt();
 		sc.nextLine(); // clear the "\n" in the buffer
-		guestList.add(new Guest(id, name, address, country, gender, nationality, contact));
+		g = new Guest(id, name, address, country, gender, nationality, contact);
+		guestList.add(g);
 		System.out.println("Guest Added");
+		return g;
 	}
 	
 	private Guest searchGuest(String name) {
