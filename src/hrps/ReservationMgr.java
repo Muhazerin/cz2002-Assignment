@@ -131,9 +131,70 @@ public class ReservationMgr {
 		}
 		if(Objects.equals(r, null)) {
 			System.out.println("Reservation does not exist");
+			return;
 		}
 		else {
-			System.out.println("Reservation exists");
+			updateOption(r);
 		}
+	}
+
+	private void updateOption(Reservation r) {
+		int uChoice = -1;
+		
+		do {
+			updateMenu();
+			uChoice = sc.nextInt();
+			sc.nextLine();	// clear the "\n" in the buffer
+			switch(uChoice) {
+				case 0:
+					System.out.println("Going back...");
+					break;
+				case 1:
+					gMgr.updateGuestDetails(r.getGuest());
+					break;
+				case 2:
+					changeRoomMenu(r);
+					break;
+				default:
+					System.out.println("Invalid Choice");
+					break;
+			}
+		} while (uChoice != 0 && uChoice != 1 && uChoice != 2);
+	}
+	
+	private static void updateMenu() {
+		System.out.println("\n+--------------------------------+");
+		System.out.println("| What would you like to update? |");
+		System.out.println("| 0. Nothing                     |");
+		System.out.println("| 1. Update Guest Details        |");
+		System.out.println("| 2. Change Room                 |");
+		System.out.println("+--------------------------------+");
+		System.out.print("Enter choice: ");
+	}
+
+	private void changeRoomMenu(Reservation r) {
+		Room room = null;
+		int uChoice = -1;
+		
+		rMgr.listRoomsByOccupancyRate();
+		
+		do {
+			System.out.println("\nPress 0 to quit");
+			System.out.print("Enter new room number: ");
+			if (sc.hasNextInt()) {
+				uChoice = sc.nextInt();
+				sc.nextLine();	// clear the "\n" in the buffer
+			}
+			else {
+				room = rMgr.isVacant(sc.next());
+				sc.nextLine();	// clear the "\n" in the buffer
+				if (!Objects.equals(room, null)) {
+					rMgr.changeRoom(r.getRoom(), room);
+					r.setRoom(room);
+					System.out.println("Room changed");
+				}
+			}
+		} while (Objects.equals(room, null) && uChoice != 0);
+		
 	}
 }

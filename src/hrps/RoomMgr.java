@@ -469,6 +469,20 @@ public class RoomMgr {
 	 * return the room if vacant
 	 * return false if room not found or not vacant
 	 */
+	public Room isVacant(String room) {
+		String[] parts = room.split("-");
+		Room r = validateRoomNumber(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+		if (Objects.equals(r, null)) {
+			System.out.println("Invalid room");
+		}
+		else {
+			if (!r.getAvailabilityStatus().equals(Room.AvailabilityStatus.VACANT) ) {
+				r = null;
+				System.out.println("Room is not vacant");
+			}
+		}
+		return r;
+	}	
 	public Room isVacant(String room, boolean walkIn) {
 		String[] parts = room.split("-");
 		Room r = validateRoomNumber(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
@@ -490,5 +504,10 @@ public class RoomMgr {
 			}
 		}
 		return r;
+	}
+
+	public void changeRoom(Room oldRoom, Room newRoom) {
+		newRoom.setAvailabilityStatus(oldRoom.getAvailabilityStatus());
+		oldRoom.setAvailabilityStatus(Room.AvailabilityStatus.VACANT);
 	}
 }

@@ -79,8 +79,7 @@ public class GuestMgr {
 		System.out.println("\tCountry: " + g.getCreditCard().getCountry());
 	}
 	
-	public void updateGuestDetails(String name) {
-		Guest g = searchGuest(name);
+	public void updateGuestDetails(Guest g) {
 		int uChoice = -1;
 		Scanner sc = new Scanner(System.in);
 		if (g == null) {
@@ -154,6 +153,11 @@ public class GuestMgr {
 				}
 			} while (uChoice != 0 && uChoice != 9);
 		}
+	}
+	
+	public void updateGuestDetails(String name) {
+		Guest g = searchGuest(name);
+		updateGuestDetails(g);
 	}
 
 	private static void updateGuestMenu() {
