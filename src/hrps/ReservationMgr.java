@@ -9,11 +9,13 @@ public class ReservationMgr {
 	private ArrayList<Reservation> reservationList = new ArrayList<Reservation>();
 	private GuestMgr gMgr = null;
 	private RoomMgr rMgr = null;
+	private MenuItemMgr miMgr = null;
 	private Scanner sc = new Scanner(System.in);
 	
-	public ReservationMgr(GuestMgr gMgr, RoomMgr rMgr) {
+	public ReservationMgr(GuestMgr gMgr, RoomMgr rMgr, MenuItemMgr miMgr) {
 		this.gMgr = gMgr;
 		this.rMgr = rMgr;
+		this.miMgr = miMgr;
 	}
 	
 	/*

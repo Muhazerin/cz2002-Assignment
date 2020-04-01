@@ -9,7 +9,7 @@ public class HRPSApp {
 		GuestMgr guestMgr = new GuestMgr();
 		MenuItemMgr miMgr = new MenuItemMgr();
 		RoomMgr rMgr = new RoomMgr();
-		ReservationMgr resMgr = new ReservationMgr(guestMgr, rMgr);
+		ReservationMgr resMgr = new ReservationMgr(guestMgr, rMgr, miMgr);
 		
 		Scanner sc = new Scanner(System.in);
 		int choice = -1;

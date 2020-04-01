@@ -1,7 +1,5 @@
 package hrps;
 
-import java.util.ArrayList;
-
 public class Room {
 	
 	public static enum RoomType{
@@ -32,7 +30,6 @@ public class Room {
 	private boolean wifiEnabled;
 	private String facing;
 	private boolean smokingAllowed;
-	private ArrayList<RoomService> roomService;
 	private int roomLevel, roomNumber;
 	
 	public Room(int id, RoomType roomType,float rate, BedType bedType, AvailabilityStatus availabilityStatus, boolean wifiEnabled, String facing, boolean smokingAllowed, int roomLevel, int roomNumber) {
@@ -46,7 +43,6 @@ public class Room {
 		this.smokingAllowed = smokingAllowed;
 		this.roomLevel = roomLevel;
 		this.roomNumber = roomNumber;
-		this.roomService = new ArrayList<RoomService>();
 	}
 	
 	public int getId() {
@@ -114,6 +110,7 @@ public class Room {
 		this.roomNumber = roomNumber;
 	}
 	
+	/*
 	public void addRoomService(RoomService rs) {
 		this.roomService.add(rs);
 	}
@@ -134,4 +131,5 @@ public class Room {
 	public void clearRoomService() {
 		this.roomService.clear();
 	}
+	*/
 }

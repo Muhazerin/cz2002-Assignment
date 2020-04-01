@@ -1,6 +1,7 @@
 package hrps;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Reservation {
 	public static enum ResStatus {
@@ -9,17 +10,26 @@ public class Reservation {
 	
 	private static int counter = 1;
 	private int resCode;
-	private Guest guest = null;
-	private Room room = null;
-	private LocalDate checkInDate = null;
-	private LocalDate checkOutDate = null;
+	private Guest guest;
+	private Room room;
+	private LocalDate checkInDate;
+	private LocalDate checkOutDate;
 	private int noOfAdults;
 	private int noOfChildren;
 	private ResStatus status;
+	private ArrayList<RoomService> roomService;
 	
 	public Reservation() {
 		this.resCode = counter;
 		counter++;
+		this.guest = null;
+		this.room = null;
+		this.checkInDate = null;
+		this.checkOutDate = null;
+		this.noOfAdults = 0;
+		this.noOfChildren = 0;
+		this.status = ResStatus.CONFIRMED;
+		this.roomService = new ArrayList<RoomService>();
 	}
 	
 	public int getResCode() {
