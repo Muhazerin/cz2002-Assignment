@@ -22,14 +22,26 @@ public class Payment{
 	
 	public void billReport() {
 		System.out.println("\nHotel Checkout Bill Report");
-		if(rs.getRoom().getRoomServicePrice() != 0)
-			System.out.println("Room Service Charge: + $SGD" + rs.getRoom().getRoomServicePrice());
-		System.out.println("Room Charge(Weekdays: "+ calculateWeekdays() +"Weekends: "+ calculateWeekends() +"): " + "$SGD" + calculateRoomCharge());
+		System.out.println("Total Room Charge(Weekdays: "+ calculateWeekdays() +", Weekends: "+ calculateWeekends() +"): " + "$SGD" + calculateRoomCharge());
+		if(rs.getRoom().getRoomService() != null) {
+			System.out.println("Room Service Charges:");
+			//getRoomServicePriceList();
+			System.out.println("Total Room Service Charge: + $SGD" + rs.getRoom().getRoomServicePrice());
+		}
 		if(calculateDiscount() != 0)
 			System.out.println("Discount: - $SGD" + calculateDiscount());
 		System.out.println("Tax Charge: + $SGD" + calculateTaxCharge());
 		System.out.println("Total bill is: $SGD" + calculateTotalBill());
 	}
+	
+	/*private void getRoomServicePriceList() {
+		ArrayList<RoomService> rsL = new ArrayList<RoomService>();
+		rsL = rs.getRoom().getRoomService();
+		for(int i=0;i<rsL.size();i++) {
+			System.out.println("Room Service <"+i+1+">:");
+			rsL.get(i).printOrder();
+		}
+	}*/
 	
 	private static void payMenu() {
 		System.out.println("\n+--------------------------------+");
@@ -54,9 +66,12 @@ public class Payment{
 					System.out.println("Enter amount paid:");
 					amt = sc.nextInt();
 					if(amt >= calculateTotalBill()) {
-						System.out.println("You have paid: SGD$" + amt);
+						System.out.println("Payment Details:");
+						System.out.println("Paid by: Cash");
+						System.out.println("Total Cost: SGD$" + calculateTotalBill());
+						System.out.println("Amount Paid: SGD$" + amt);
 						if(amt > calculateTotalBill())
-							System.out.println("Your change is: SGD$" + (amt - calculateTotalBill()));
+							System.out.println("Change: SGD$" + (amt - calculateTotalBill()));
 						System.out.println("Payment completed");
 						return true;
 					}
@@ -71,7 +86,13 @@ public class Payment{
 						int csv = 0;
 						System.out.print("Enter your credit card CSV pin: ");
 						csv = sc.nextInt();
-						if(csv == rs.getGuest().getCreditCart().getCsv()) {
+						if(csv == rs.getGuest().getCreditCard().getCvv()) {
+							System.out.println("Payment Details:");
+							System.out.println("Paid by: Credit Card");
+							System.out.println("Type: " + rs.getGuest().getCreditCard().getcType());
+							System.out.println("Name: " + rs.getGuest().getCreditCard().getName());
+							System.out.println("Address: " + rs.getGuest().getCreditCard().getAddress());
+							System.out.println("Amount Billed: " + calculateTotalBill());
 							System.out.println("Payment completed");
 							return true;
 						}else
@@ -81,7 +102,6 @@ public class Payment{
 				case 3:
 					System.out.println("Payment Cancelled");
 					return false;
-					break;
 				default:
 					System.out.println("Invalid choice");
 					break;
@@ -98,6 +118,7 @@ public class Payment{
 			if(day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)
 				weekends++;
 		}
+		return weekends;
 	}
 	
 	private int calculateWeekdays() {
@@ -109,6 +130,7 @@ public class Payment{
 			if(day != DayOfWeek.SATURDAY && day != DayOfWeek.SUNDAY)
 				weekdays++;
 		}
+		return weekdays;
 	}
 	
 	private float calculateRoomCharge() {
