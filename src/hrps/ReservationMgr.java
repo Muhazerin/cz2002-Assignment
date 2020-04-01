@@ -131,7 +131,6 @@ public class ReservationMgr {
 		}
 		if(Objects.equals(r, null)) {
 			System.out.println("Reservation does not exist");
-			return;
 		}
 		else {
 			updateOption(r);
@@ -196,5 +195,49 @@ public class ReservationMgr {
 			}
 		} while (Objects.equals(room, null) && uChoice != 0);
 		
+	}
+
+	public void removeReservation() {
+		String s;
+		Reservation r = null;
+		
+		System.out.print("Enter guest's name or room: ");
+		s = sc.nextLine();
+		if (s.contains("-")) {
+			String[] parts = s.split("-");
+			r = searchReservation(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+		}
+		else {
+			r = searchReservation(s);
+		}
+		if(Objects.equals(r, null)) {
+			System.out.println("Reservation does not exist");
+		}
+		else {
+			r.removeRoom();
+			reservationList.remove(r);
+			System.out.println("Reservation removed");
+		}
+	}
+	
+	public void printReservation() {
+		String s;
+		Reservation r = null;
+		
+		System.out.print("Enter guest's name or room: ");
+		s = sc.nextLine();
+		if (s.contains("-")) {
+			String[] parts = s.split("-");
+			r = searchReservation(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+		}
+		else {
+			r = searchReservation(s);
+		}
+		if(Objects.equals(r, null)) {
+			System.out.println("Reservation does not exist");
+		}
+		else {
+			r.printReceipt();
+		}
 	}
 }

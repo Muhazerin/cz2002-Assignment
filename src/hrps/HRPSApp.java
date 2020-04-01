@@ -252,6 +252,12 @@ public class HRPSApp {
 				case 2:
 					resMgr.updateReservation();
 					break;
+				case 3:
+					resMgr.removeReservation();
+					break;
+				case 4:
+					resMgr.printReservation();
+					break;
 				default:
 					System.out.println("Invalid Choice");
 					break;
