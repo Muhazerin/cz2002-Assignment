@@ -23,10 +23,10 @@ public class Payment{
 	public void billReport() {
 		System.out.println("\nHotel Checkout Bill Report");
 		System.out.println("Total Room Charge(Weekdays: "+ calculateWeekdays() +", Weekends: "+ calculateWeekends() +"): " + "$SGD" + calculateRoomCharge());
-		if(rs.getRoom().getRoomService() != null) {
+		if(rs.getRoomService() != null) {
 			System.out.println("Room Service Charges:");
-			//getRoomServicePriceList();
-			System.out.println("Total Room Service Charge: + $SGD" + rs.getRoom().getRoomServicePrice());
+			getRoomServicePriceList();
+			System.out.println("Total Room Service Charge: + $SGD" + rs.getRoomServicePrice());
 		}
 		if(calculateDiscount() != 0)
 			System.out.println("Discount: - $SGD" + calculateDiscount());
@@ -34,14 +34,14 @@ public class Payment{
 		System.out.println("Total bill is: $SGD" + calculateTotalBill());
 	}
 	
-	/*private void getRoomServicePriceList() {
+	private void getRoomServicePriceList() {
 		ArrayList<RoomService> rsL = new ArrayList<RoomService>();
-		rsL = rs.getRoom().getRoomService();
+		rsL = rs.getRoomService();
 		for(int i=0;i<rsL.size();i++) {
-			System.out.println("Room Service <"+i+1+">:");
+			System.out.println("Room Service <"+(i+1)+">:");
 			rsL.get(i).printOrder();
 		}
-	}*/
+	}
 	
 	private static void payMenu() {
 		System.out.println("\n+--------------------------------+");
@@ -151,15 +151,15 @@ public class Payment{
 	}
 	
 	private float calculateDiscount(){
-		return (rs.getRoom().getRoomServicePrice() + calculateRoomCharge()) * discountRate;
+		return (rs.getRoomServicePrice() + calculateRoomCharge()) * discountRate;
 	}
 	
 	private float calculateTaxCharge() {
-		return (rs.getRoom().getRoomServicePrice() + calculateRoomCharge() - calculateDiscount()) * taxRate;
+		return (rs.getRoomServicePrice() + calculateRoomCharge() - calculateDiscount()) * taxRate;
 	}
 	
 	private float calculateTotalBill() {
-		return (rs.getRoom().getRoomServicePrice() + calculateRoomCharge() - calculateDiscount()) + calculateTaxCharge();
+		return (rs.getRoomServicePrice() + calculateRoomCharge() - calculateDiscount()) + calculateTaxCharge();
 	}
 
 	public double getTaxRate() {
