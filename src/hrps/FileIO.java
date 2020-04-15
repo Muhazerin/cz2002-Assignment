@@ -1,3 +1,5 @@
+package hrps;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,6 +36,9 @@ public class FileIO {
 					objs.add(obj);	
 				}
 			}
+			
+			oi.close();
+			fi.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found");
 		} catch (IOException e) {
@@ -75,10 +80,12 @@ public class FileIO {
 			FileOutputStream f = new FileOutputStream(new File(directory));
 			ObjectOutputStream o = new ObjectOutputStream(f);
 
-			// Write objects to file
+			
+			// Write objects to file 
 			for (int i = 0; i < stored.length; i++) {
-				o.writeObject(stored[i]);
+				o.writeObject(stored[i]); 
 			}
+			 
 			
 			o.writeObject(obj);
 			o.close();

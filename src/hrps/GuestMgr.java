@@ -1,22 +1,43 @@
 package hrps;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class GuestMgr {
-	private ArrayList<Guest> guestList = new ArrayList<Guest>();
+	private ArrayList<Guest> guestList;
+	private FileIO fileIO;
+	private int counter = 1;
+	private Scanner sc;
 	
-	public void addGuest(Guest g) {
-		guestList.add(g);
-		System.out.println("Guest Added");
+	/*
+	 * Constructor for GuestMgr class
+	 * Initialize some variables
+	 * Retrieve guests from file
+	 */
+	public GuestMgr(Scanner sc) {
+		//System.out.println("GuestMgr");
+		
+		this.sc = sc;
+		guestList = new ArrayList<Guest>();
+		fileIO = new FileIO();
+		
+		Object[] objArray = fileIO.readObject(Guest.class);
+		for (Object o : objArray) {
+			Guest g = (Guest) o;
+			guestList.add(g);
+		}
+		counter = guestList.size() + 1;
 	}
-	
+		
+	/*
+	 * This method adds a guest to guestList and file
+	 */
 	public Guest addGuest() {
 		Guest g = null;
-		String id, name, address, country, gender, nationality;
-		int contact;
-		Scanner sc = new Scanner(System.in);
+		String id, name, address, country, gender, nationality, exp = "";
+		int contact = 0, cvv = 0;
+		long cardNo = 0;
+		CreditCard.CardType cType = null;
 		System.out.print("Enter name: ");
 		name = sc.nextLine();
 		System.out.print("Enter ID: ");
@@ -30,14 +51,32 @@ public class GuestMgr {
 		System.out.print("Enter nationality: ");
 		nationality = sc.nextLine();
 		System.out.print("Enter contact number: ");
-		contact = sc.nextInt();
-		sc.nextLine(); // clear the "\n" in the buffer
-		g = new Guest(id, name, address, country, gender, nationality, contact);
+		contact = validateChoice(contact, "Enter contact number: ");
+		
+		cType = getCardType();
+		System.out.print("Enter card no:");
+		cardNo = validateCardNo(cardNo, "Enter card no: ");
+		System.out.print("Enter cvv: ");
+		cvv = validateChoice(cvv, "Enter cvv: ");
+		System.out.print("Enter expiry date (mm/yy): ");
+		exp = validateExp(exp, "Enter expiry date (mm/yy): ");
+		
+		g = new Guest(counter, id, name, address, country, gender, nationality, contact, cType, cardNo, cvv, exp);
+		
+		counter++;
 		guestList.add(g);
 		System.out.println("Guest Added");
+		
+		fileIO.writeObject(guestList.toArray(), g.getClass());
+		
 		return g;
 	}
 	
+	/* 
+	 * This method searches and returns a guest in the guestList
+	 * Returns a guest object if found
+	 * Returns null if not found
+	 */
 	private Guest searchGuest(String name) {
 		if (guestList.size() == 0) {
 			return null;
@@ -50,6 +89,9 @@ public class GuestMgr {
 		return null;
 	}
 	
+	/*
+	 * This method searches and lists the guest's details
+	 */
 	public void listGuestDetails(String name) {
 		Guest g = searchGuest(name);
 		if (g != null) {
@@ -60,7 +102,10 @@ public class GuestMgr {
 		}
 	}
 	
-	private static void printGuestDetails(Guest g) {
+	/*
+	 * This method lists guest's details
+	 */
+	private void printGuestDetails(Guest g) {
 		System.out.println("\nGuest Details: ");
 		System.out.println("\tName: " + g.getName());
 		System.out.println("\tID: " + g.getId());
@@ -79,9 +124,11 @@ public class GuestMgr {
 		System.out.println("\tCountry: " + g.getCreditCard().getCountry());
 	}
 	
+	/*
+	 * This method updates the guest and updates the file
+	 */
 	public void updateGuestDetails(Guest g) {
 		int uChoice = -1;
-		Scanner sc = new Scanner(System.in);
 		if (g == null) {
 			System.out.println("Guest does not exist");
 		}
@@ -89,8 +136,7 @@ public class GuestMgr {
 			do {
 				int number = 0;
 				updateGuestMenu();
-				uChoice = sc.nextInt();
-				sc.nextLine();	// clear the "\n" in the buffer
+				uChoice = validateChoice(uChoice, "Enter choice: ");
 				switch(uChoice) {
 					case 0:
 						System.out.println("\nThe new guest details are:");
@@ -122,8 +168,7 @@ public class GuestMgr {
 						break;
 					case 7:
 						System.out.print("Enter new contact number: ");
-						number = sc.nextInt();
-						sc.nextLine();	// clear the "\n" in the buffer
+						number = validateChoice(number, "Enter new contact number: ");
 						g.setContact(number);
 						break;
 					case 8:
@@ -141,8 +186,7 @@ public class GuestMgr {
 						System.out.print("Enter new gender: ");
 						g.setGender(sc.nextLine());
 						System.out.println("Enter new contact number: ");
-						number = sc.nextInt();
-						sc.nextLine();	// clear the "\n" in the buffer
+						number = validateChoice(number, "Enter new contact number: ");
 						g.setContact(number);
 						updateCreditCard(g);
 						printGuestDetails(g);
@@ -153,14 +197,22 @@ public class GuestMgr {
 				}
 			} while (uChoice != 0 && uChoice != 9);
 		}
+		fileIO.writeObject(guestList.toArray(), Guest.class);
 	}
 	
+	/*
+	 * Overloaded function for updateGuestDetails
+	 * searchs for guest and go to updateGuestDetails(Guest g)
+	 */
 	public void updateGuestDetails(String name) {
 		Guest g = searchGuest(name);
 		updateGuestDetails(g);
 	}
 
-	private static void updateGuestMenu() {
+	/*
+	 * This method contains the menu for updating guest
+	 */
+	private void updateGuestMenu() {
 		System.out.println("\n+--------------------------------+");
 		System.out.println("| What would you like to update: |");
 		System.out.println("| 0. Nothing                     |");
@@ -177,7 +229,10 @@ public class GuestMgr {
 		System.out.print("Enter choice: ");
 	}
 
-	private static void updateCreditCardMenu() {
+	/*
+	 * This method contains the menu for updating credit card
+	 */
+	private void updateCreditCardMenu() {
 		System.out.println("\n+--------------------------------+");
 		System.out.println("| What would you like to update: |");
 		System.out.println("| 0. Nothing                     |");
@@ -193,36 +248,37 @@ public class GuestMgr {
 		System.out.print("Enter choice: ");
 	}
 
+	/*
+	 * This method updates the credit card. No need fileIO as this is method is only accessible on updateGuestDetails()
+	 */
 	private void updateCreditCard(Guest g) {
-		Scanner sc = new Scanner(System.in);
 		int uChoice = -1, cvv = -1;
 		long cardNo = 0;
+		String exp = null;
 		do {
 			updateCreditCardMenu();
-			uChoice = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
+			uChoice = validateChoice(uChoice, "Enter choice: ");
 			switch (uChoice) {
 				case 0:
 					System.out.println("Going back...");
 					break;
 				case 1:
 					System.out.print("Enter new card no: ");
-					cardNo = sc.nextLong();
-					sc.nextLine();	// clear the "\n" in the buffer
+					cardNo = validateCardNo(cardNo, "Enter new card no: ");
 					g.getCreditCard().setCardNo(cardNo);
 					break;
 				case 2:
-					g.getCreditCard().setcType(Guest.selectCardType());
+					g.getCreditCard().setcType(getCardType());
 					break;
 				case 3:
 					System.out.print("Enter new cvv: ");
-					cvv = sc.nextInt();
-					sc.nextLine();	// clear the "\n" in the buffer
+					cvv = validateChoice(cvv, "Enter new cvv: ");
 					g.getCreditCard().setCvv(cvv);
 					break;
 				case 4:
 					System.out.print("Enter new expiry: ");
-					g.getCreditCard().setExp(sc.nextLine());
+					exp = validateExp(exp, "Enter new expiry: ");
+					g.getCreditCard().setExp(exp);
 					break;
 				case 5:
 					System.out.print("Enter new name: ");
@@ -238,16 +294,15 @@ public class GuestMgr {
 					break;
 				case 8:
 					System.out.print("Enter new card no: ");
-					cardNo = sc.nextLong();
-					sc.nextLine();	// clear the "\n" in the buffer
+					cardNo = validateCardNo(cardNo, "Enter new card no: ");
 					g.getCreditCard().setCardNo(cardNo);
-					g.getCreditCard().setcType(Guest.selectCardType());
+					g.getCreditCard().setcType(getCardType());
 					System.out.print("Enter new cvv: ");
-					cvv = sc.nextInt();
-					sc.nextLine();	// clear the "\n" in the buffer
+					cvv = validateChoice(cvv, "Enter new cvv: ");
 					g.getCreditCard().setCvv(cvv);
 					System.out.print("Enter new expiry: ");
-					g.getCreditCard().setExp(sc.nextLine());
+					exp = validateExp(exp, "Enter new expiry: ");
+					g.getCreditCard().setExp(exp);
 					System.out.print("Enter new name: ");
 					g.getCreditCard().setName(sc.nextLine());
 					System.out.print("Enter new address: ");
@@ -263,4 +318,134 @@ public class GuestMgr {
 		} while(uChoice != 0 && uChoice != 8);
 	}
 
+	private CreditCard.CardType getCardType() {
+		int choice = -1;
+		CreditCard.CardType cType = null;
+		
+		do {
+			System.out.println("\n+-------------------+");
+			System.out.println("| Select card type: |");
+			System.out.println("| 1. Mastercard     |");
+			System.out.println("| 2. Visa           |");
+			System.out.println("+-------------------+");
+			System.out.print("Enter choice: ");
+			choice = validateChoice(choice, "Enter choice: ");
+			switch (choice) {
+				case 1:
+					cType = CreditCard.CardType.MASTER;
+					break;
+				case 2:
+					cType = CreditCard.CardType.VISA;
+					break;
+				default:
+					System.out.println("Invalid Choice");
+					break;
+			}
+		} while (choice != 1 && choice != 2);
+		return cType;
+	}
+	
+	/*
+	 * This method returns the guest based on the gID
+	 * Used in ReservationMgr to set guests for reservation
+	 */
+	public Guest getGuestByGId(int gId) {
+		Guest g = null;
+		
+		for (Guest temp : guestList) {
+			if (temp.getGId() == gId) {
+				g = temp;
+				break;
+			}
+		}
+		return g;
+	}
+
+	/*
+	 * This method is used to ensure that user enters an integer
+	 */
+	private int validateChoice(int choice, String inputText) {
+		boolean valid = false;
+		
+		while (!valid) {
+			if (!sc.hasNextInt()) {
+				System.out.println("Invalid Input. Please enter an integer");
+				sc.nextLine();	// clear the input in the buffer
+				System.out.print(inputText);
+			}
+			else {
+				valid = true;
+				choice = sc.nextInt();
+				sc.nextLine();	// clear the "\n" in the buffer
+			}
+		}
+		
+		return choice;
+	}
+
+	/*
+	 * This method is used to ensure that user enters a long integer
+	 */
+	private long validateCardNo(long cardNo, String inputText) {
+		boolean valid = false;
+		
+		while (!valid) {
+			if (!sc.hasNextLong()) {
+				System.out.println("Invalid Input. Please enter an integer");
+				sc.nextLine();	// clear the input in the buffer
+				System.out.print(inputText);
+			}
+			else {
+				valid = true;
+				cardNo = sc.nextLong();
+				sc.nextLine();	// clear the "\n" in the buffer
+			}
+		}
+		
+		return cardNo;
+	}
+
+	/*
+	 * This method is used to ensure that user enters a proper expiry date
+	 */
+	private String validateExp(String exp, String inputText) {
+		boolean valid = false, isNum1 = false, isNum2 = false;
+		
+		while (!valid) {
+			exp = sc.nextLine();
+			if (!exp.contains("/")) {
+				System.out.println("Invalid expiry date. Please enter an expiry date");
+				System.out.print(inputText);
+			}
+			else {
+				String[] parts = exp.split("/");
+				if (parts.length == 2) {
+					isNum1 = isInteger(parts[0]);
+					isNum2 = isInteger(parts[1]);
+				}
+				if (!isNum1 || !isNum2) {
+					System.out.println("Invalid expiry date. Please enter an expiry date");
+					System.out.print(inputText);
+				}
+				else {
+					valid = true;
+				}
+			}
+		}
+		
+		return exp;
+	}
+
+	/*
+	 * This method checks whether a string is an integer
+	 */
+	private boolean isInteger(String input) {
+		try {
+			Integer.parseInt(input);
+			return true;
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
 }

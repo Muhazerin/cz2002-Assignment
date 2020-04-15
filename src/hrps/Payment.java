@@ -1,8 +1,8 @@
 package hrps;
 
+import java.util.ArrayList;
 import java.time.DayOfWeek;
 import java.time.temporal.ChronoField;
-import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
 
@@ -12,106 +12,102 @@ public class Payment{
 	private double discountRate;
 	private double weekendRate;
 	private Reservation rs;
+	private Scanner sc;
 	
-	public Payment(Reservation r) {
+	/*
+	 * Constructor for Payment class
+	 * Initialize the taxRate, weekendRate, discountRate, Reservation, and Scanner class
+	 */
+	public Payment(Reservation r, Scanner sc) {
 		this.taxRate = 0.07;
 		this.weekendRate = 1.15;
 		this.discountRate = 0.25;
 		this.rs = r;
+		this.sc = sc;
 	}
 	
+	/*
+	 * This method prints the bill
+	 */
 	public void billReport() {
 		System.out.println("\nHotel Checkout Bill Report");
 		System.out.println("Total Room Charge(Weekdays: "+ calculateWeekdays() +", Weekends: "+ calculateWeekends() +"): " + "$SGD" + calculateRoomCharge());
-		if(rs.getRoomService() != null) {
+		if (rs.getRoomServiceList().size() != 0) {
 			System.out.println("Room Service Charges:");
 			getRoomServicePriceList();
 			System.out.println("Total Room Service Charge: + $SGD" + rs.getRoomServicePrice());
 		}
+
 		if(calculateDiscount() != 0)
 			System.out.println("Discount: - $SGD" + calculateDiscount());
 		System.out.println("Tax Charge: + $SGD" + calculateTaxCharge());
 		System.out.println("Total bill is: $SGD" + calculateTotalBill());
 	}
 	
+	/*
+	 * This method prints all of the room service's order
+	 */
 	private void getRoomServicePriceList() {
-		ArrayList<RoomService> rsL = new ArrayList<RoomService>();
-		rsL = rs.getRoomService();
-		for(int i=0;i<rsL.size();i++) {
-			System.out.println("Room Service <"+(i+1)+">:");
-			rsL.get(i).printOrder();
+		ArrayList<RoomService> rsL = rs.getRoomServiceList();
+		for (RoomService roomService : rsL) {
+			System.out.println("Room Service <"+ rsL.indexOf(roomService)+1 +">");
+			roomService.printOrder();
 		}
 	}
 	
+	/*
+	 * This method contains the menu for payment method
+	 */
 	private static void payMenu() {
 		System.out.println("\n+--------------------------------+");
 		System.out.println("| How would you like to pay:     |");
 		System.out.println("| 1. Cash                        |");
 		System.out.println("| 2. Credit Card                 |");
-		System.out.println("| 3. I do not want to pay yet    |");
 		System.out.println("+--------------------------------+");
 		System.out.print("Enter choice: ");
 	}
 	
-	public boolean payment() {
+	/*
+	 * This method lets the user pay for the reservation by cash or credit card
+	 */
+	public void payment() {
 		int uChoice = -1;
-		Scanner sc = new Scanner(System.in);
-		while(true) {
+		do {
 			payMenu();
-			uChoice = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
-			switch(uChoice) {
-				case 1:
-					int amt = 0;
-					System.out.println("Enter amount paid:");
-					amt = sc.nextInt();
-					if(amt >= calculateTotalBill()) {
-						System.out.println("Payment Details:");
-						System.out.println("Paid by: Cash");
-						System.out.println("Total Cost: SGD$" + calculateTotalBill());
-						System.out.println("Amount Paid: SGD$" + amt);
-						if(amt > calculateTotalBill())
-							System.out.println("Change: SGD$" + (amt - calculateTotalBill()));
-						System.out.println("Payment completed");
-						return true;
-					}
-					else if(amt < calculateTotalBill()) {
-						System.out.println("Insufficient amount given");
-					}
-					break;
-				case 2:
-					if(rs.getGuest().getCreditCard() == null)
-						System.out.print("You do not have a credit card");
-					else {
-						int csv = 0;
-						System.out.print("Enter your credit card CSV pin: ");
-						csv = sc.nextInt();
-						if(csv == rs.getGuest().getCreditCard().getCvv()) {
-							System.out.println("Payment Details:");
-							System.out.println("Paid by: Credit Card");
-							System.out.println("Type: " + rs.getGuest().getCreditCard().getcType());
-							System.out.println("Name: " + rs.getGuest().getCreditCard().getName());
-							System.out.println("Address: " + rs.getGuest().getCreditCard().getAddress());
-							System.out.println("Amount Billed: " + calculateTotalBill());
-							System.out.println("Payment completed");
-							return true;
-						}else
-							System.out.println("You have entered the wrong CSV pin");
-					}
-					break;
-				case 3:
-					System.out.println("Payment Cancelled");
-					return false;
-				default:
-					System.out.println("Invalid choice");
-					break;
+			uChoice = validateChoice(uChoice, "Enter choice: ");
+			
+			switch (uChoice) {
+			case 1:
+				System.out.println("Payment Details:");
+				System.out.println("Paid by: Cash");
+				System.out.printf("Total Cost: SGD$%.2f\n",calculateTotalBill());
+				System.out.printf("Amount Paid: SGD$%.2f\n",calculateTotalBill());
+				System.out.println("Payment completed");
+				break;
+			case 2:
+				System.out.println("Payment Details:");
+				System.out.println("Paid by: Credit Card");
+				System.out.println("Type: " + rs.getGuest().getCreditCard().getcType());
+				System.out.println("Name: " + rs.getGuest().getCreditCard().getName());
+				System.out.println("Address: " + rs.getGuest().getCreditCard().getAddress());
+				System.out.printf("Amount Billed: $%.2f\n",calculateTotalBill());
+				System.out.println("Payment completed");
+				break;
+			default:
+				System.out.println("Invalid choice");
+				break;
 			}
-		}
+			
+		} while (uChoice != 1 && uChoice != 2);
+		
 	}
 	
+	/*
+	 * This method calculates the number of weekends the user spent in the hotel 
+	 */
 	private int calculateWeekends() {
 		int weekends = 0;
-		Period stay = Period.between(rs.getCheckOutDate(), rs.getCheckInDate()); //Get the period between check in date and check out date.
+		Period stay = Period.between(rs.getCheckInDate(), rs.getCheckOutDate()); //Get the period between check in date and check out date.
 	  	int totalDays = stay.getDays(); //Calculate the total days between check in date and check out date.
 		for(int i=0; i<totalDays; i++){
 			DayOfWeek day = DayOfWeek.of((rs.getCheckInDate().plusDays(i).get(ChronoField.DAY_OF_WEEK))); //Get the name of each day.
@@ -121,9 +117,12 @@ public class Payment{
 		return weekends;
 	}
 	
+	/*
+	 * This method calculates the number of weekdays the user spent in the hotel
+	 */
 	private int calculateWeekdays() {
 		int weekdays = 0;
-		Period stay = Period.between(rs.getCheckOutDate(), rs.getCheckInDate()); //Get the period between check in date and check out date.
+		Period stay = Period.between(rs.getCheckInDate(), rs.getCheckOutDate()); //Get the period between check in date and check out date.
 	  	int totalDays = stay.getDays(); //Calculate the total days between check in date and check out date.
 		for(int i=0; i<totalDays; i++){
 			DayOfWeek day = DayOfWeek.of((rs.getCheckInDate().plusDays(i).get(ChronoField.DAY_OF_WEEK))); //Get the name of each day.
@@ -133,32 +132,45 @@ public class Payment{
 		return weekdays;
 	}
 	
+	/*
+	 * This method calculate the total room charge
+	 * Return totalDay*roomRate
+	 */
 	private float calculateRoomCharge() {
 		float totalPrice = 0;
-		Period stay = Period.between(rs.getCheckOutDate(), rs.getCheckInDate()); //Get the period between check in date and check out date.
+		Period stay = Period.between(rs.getCheckInDate(), rs.getCheckOutDate()); //Get the period between check in date and check out date.
 	  	int totalDays = stay.getDays(); //Calculate the total days between check in date and check out date.
-		for(int i=0; i<totalDays; i++){
+	  	for(int i=0; i<totalDays; i++){
 			DayOfWeek day = DayOfWeek.of((rs.getCheckInDate().plusDays(i).get(ChronoField.DAY_OF_WEEK))); //Get the name of each day.
 			if(day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY){
-				totalPrice += rs.getRoom().getRate() * totalDays * weekendRate;
+				totalPrice += rs.getRoom().getRate() * weekendRate;
 				
 			}else{
 				
-				totalPrice += rs.getRoom().getRate() * totalDays;
+				totalPrice += rs.getRoom().getRate();
 			}
 		}
 		return totalPrice;
 	}
 	
-	private float calculateDiscount(){
+	/*
+	 * This method calculate the total discount 
+	 */
+	private double calculateDiscount(){
 		return (rs.getRoomServicePrice() + calculateRoomCharge()) * discountRate;
 	}
 	
-	private float calculateTaxCharge() {
+	/*
+	 * This method calculate the total tax payable
+	 */
+	private double calculateTaxCharge() {
 		return (rs.getRoomServicePrice() + calculateRoomCharge() - calculateDiscount()) * taxRate;
 	}
 	
-	private float calculateTotalBill() {
+	/*
+	 * This method calculate the total bill based on the discount and tax
+	 */
+	private double calculateTotalBill() {
 		return (rs.getRoomServicePrice() + calculateRoomCharge() - calculateDiscount()) + calculateTaxCharge();
 	}
 
@@ -184,5 +196,24 @@ public class Payment{
 
 	public void setWeekendRate(double weekendRate) {
 		this.weekendRate = weekendRate;
+	}
+	
+	private int validateChoice(int choice, String inputText) {
+		boolean valid = false;
+		
+		while (!valid) {
+			if (!sc.hasNextInt()) {
+				System.out.println("Invalid Input. Please enter an integer");
+				sc.nextLine();	// clear the input in the buffer
+				System.out.print(inputText);
+			}
+			else {
+				valid = true;
+				choice = sc.nextInt();
+				sc.nextLine();	// clear the "\n" in the buffer
+			}
+		}
+		
+		return choice;
 	}
 }

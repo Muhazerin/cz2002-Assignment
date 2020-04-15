@@ -1,12 +1,17 @@
 package hrps;
 
+import java.io.Serializable;
+
 /**
  * @author      Koh Tong Liang <KOHT0029@e.ntu.edu.sg>
  * @version     1.0
  * @since       1.0
  */
-class MenuItem 
+public class MenuItem implements Serializable 
 {
+	
+	private static final long serialVersionUID = 1234L;
+	
 	/**
 	 * Unique id for identification. Name and description to describe menuitem
 	 */
@@ -72,5 +77,9 @@ class MenuItem
 	
 	public void setPrice(float price) {
 		this.price = price;
+	}
+	
+	public int getID() {
+		return this.id;
 	}
 }

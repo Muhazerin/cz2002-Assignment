@@ -1,56 +1,76 @@
 package hrps;
 
-//a) Hotel staff can order room service meals on guest’s behalf upon his/her request.
+//a) Hotel staff can order room service meals on guest's behalf upon his/her request.
 //b) List of menu items selection will be displayed for selection.
 //c) Each menu item will have a name, a description of how it is prepared and price. (Under MenuItem class)
 //d) When ordered, there will be a room service order created with a date/time, remarks (eg, less oil, less
 //salt) and the status (confirmed, preparing, delivered).
 //e) The order status will be updated accordingly. ???
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class RoomService {
+public class RoomService implements Serializable{
 	
-	private MenuItem[] menuItem;
-	public enum orderStatus {CONFIRMED, PREPARING, DELIVERED; }
-	private Date dateTime =  null;
+	private static final long serialVersionUID = 1234L;
+	private ArrayList<MenuItem> menuItemList;
+	public enum OrderType {CONFIRMED, PREPARING, DELIVERED; }
+	private LocalDate dateTime =  null;
 	private String remarks;
-	private int i;
+	private int id;
+	private OrderType orderStatus;
 	//private String roomId;
 	
 	public RoomService() {
-		this.menuItem = new MenuItem[99];
-		this.remarks = "";
-		this.i = 0;
+		this.menuItemList = new ArrayList<MenuItem>();
+		this.orderStatus = OrderType.PREPARING;
 	}
 	
-	public void placeOrder(int id, String menuName, String menuDescription, float menuPrice, String rmks){
+	public void placeOrder(int id, String remarks, ArrayList<MenuItem> miList){
 		// what is Id?
-		this.dateTime = new Date();
-		this.remarks = rmks;
-		menuItem[i].setId(id);
-		menuItem[i].setName(menuName);
-		menuItem[i].setDescription(menuDescription);
-		menuItem[i].setPrice(menuPrice);
-		menuItem[i].setDate(dateTime);
-		menuItem[i].setRemarks(rmks);
-		this.i = i++;
+		this.dateTime = LocalDate.now();
+		this.id = id;
+		this.remarks = remarks;
+		menuItemList = miList;
 	}
 	
 	public void printOrder() {
-		System.out.println("Summary of all orders:");
-		for(int j=0; j<i; j++) {
-			System.out.println(menuItem[j].getName() + " , " + menuItem[j].getPrice() + " , " + menuItem[j].getDate());
+		System.out.println("Summary of orders:");
+		System.out.println("Room Service Id: " + this.id);
+		System.out.println("Ordered on: " + this.dateTime.toString());
+		System.out.println("Order status: " + this.getOrderStatus().toString());
+		for (MenuItem mi : menuItemList) {
+			System.out.println("Food ordered: " + mi.getName());
+			System.out.println("Price: $" + mi.getPrice());
 		}
 	}
 	
 	public float getMenuItemTotalCost() {
 		float total = 0;
-		for(int j=0; j<i; j++) {
-			total += menuItem[j].getPrice();
+		for (MenuItem mi : menuItemList) {
+			total += mi.getPrice();
 		}
 		return total;
 	}
 	
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	
+	public String getRemarks() {
+		return this.remarks;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setOrderStatus(OrderType orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+	
+	public OrderType getOrderStatus() {
+		return this.orderStatus;
+	}
 }

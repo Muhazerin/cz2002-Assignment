@@ -5,13 +5,26 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class RoomMgr {
-	private ArrayList<Room> roomList = new ArrayList<Room>();
+	private ArrayList<Room> roomList;
 	private int counter = 1;
+	private FileIO fileIO = new FileIO();
+	private Scanner sc;
 	
-	// Initialize 48 rooms in the constructor
-	public RoomMgr() {
-		int roomNumber = 1;
-		for (int i = 0; i < 48; i++) {
+	/*
+	 * Constructor for RoomMgr class
+	 * Contains some initialization
+	 * Can re-create the 48 rooms if I fucked it up
+	 * Can retrieve the rooms from the file
+	 */
+	public RoomMgr(Scanner sc) {
+		//System.out.println("RoomMgr");
+		
+		roomList = new ArrayList<Room>();
+		this.sc = sc;
+		
+		// in case i fucked up the room, this code re-creates the rooms and writes it back to the file
+		/*int roomNumber = 1;
+		 for (int i = 0; i < 48; i++) {
 			if (i == 6 || i == 12 || i == 18 || i == 24 || i == 36) {
 				roomNumber = 1;
 			}
@@ -45,9 +58,20 @@ public class RoomMgr {
 			}
 			counter++;
 		}
+		fileIO.writeObject(roomList.toArray(), Room.class); */
+		
+		Object[] objArray = fileIO.readObject(Room.class);
+		for (Object o : objArray) {
+			Room r = (Room) o;
+			roomList.add(r);
+		}
+		counter = roomList.size() + 1;
 	}
 	
-	private static float determineRate(Room.RoomType rType, Room.BedType bType) {
+	/*
+	 * This method contains basic logic to auto set rate based on room type and bed type
+	 */
+	private float determineRate(Room.RoomType rType, Room.BedType bType) {
 		if (rType.equals(Room.RoomType.SINGLE)) {
 			if (bType.equals(Room.BedType.SINGLE)) {
 				return 1;
@@ -72,7 +96,10 @@ public class RoomMgr {
 		}
 	}
 	
-	private static void roomTypeMenu() {
+	/*
+	 * This method contains the menu for updating room type
+	 */
+	private void roomTypeMenu() {
 		System.out.println("\n+-------------------+");
 		System.out.println("| Select room type: |");
 		System.out.println("| 1. Single         |");
@@ -83,14 +110,15 @@ public class RoomMgr {
 		System.out.print("Enter choice: ");
 	}
 	
-	private static Room.RoomType selectRoomType() {
+	/*
+	 * This method returns the room type based on user's input
+	 */
+	private Room.RoomType selectRoomType(Scanner sc) {
 		int rtChoice = -1;
-		Scanner sc = new Scanner(System.in);
 		Room.RoomType rt = null;
 		do {
 			roomTypeMenu();
-			rtChoice = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
+			rtChoice = validateChoice(rtChoice, "Enter choice: ");
 			switch(rtChoice) {
 				case 1:
 					rt =  Room.RoomType.SINGLE;
@@ -113,7 +141,10 @@ public class RoomMgr {
 		return rt;
 	}
 	
-	private static void bedTypeMenu() {
+	/*
+	 * This method contains the menu for updating bed type
+	 */
+	private void bedTypeMenu() {
 		System.out.println("\n+------------------+");
 		System.out.println("| Select bed type: |");
 		System.out.println("| 1. Single        |");
@@ -123,14 +154,15 @@ public class RoomMgr {
 		System.out.print("Enter choice: ");
 	}
 
-	private static Room.BedType selectBedType() {
+	/*
+	 * This method returns the bed type based on user's input
+	 */
+	private Room.BedType selectBedType(Scanner sc) {
 		int btChoice = -1;
-		Scanner sc = new Scanner(System.in);
 		Room.BedType bt = null;
 		do {
 			bedTypeMenu();
-			btChoice = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
+			btChoice = validateChoice(btChoice, "Enter choice: ");
 			switch(btChoice) {
 				case 1:
 					bt = Room.BedType.SINGLE;
@@ -149,7 +181,10 @@ public class RoomMgr {
 		return bt;
 	}
 	
-	private static void availStatusMenu() {
+	/*
+	 * This method contains the menu for updating the availability status
+	 */
+	private void availStatusMenu() {
 		System.out.println("\n+-----------------------------+");
 		System.out.println("| Select availability status: |");
 		System.out.println("| 1. Vacant                   |");
@@ -160,15 +195,16 @@ public class RoomMgr {
 		System.out.print("Enter choice: ");
 	}
 	
-	private static Room.AvailabilityStatus selectAvailStatus() {
+	/*
+	 * This method returns the availability status based on user's input
+	 */
+	private Room.AvailabilityStatus selectAvailStatus(Scanner sc) {
 		int asChoice = -1;
-		Scanner sc = new Scanner(System.in);
 		Room.AvailabilityStatus as = null;
 		
 		do {
 			availStatusMenu();
-			asChoice = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
+			asChoice = validateChoice(asChoice, "Enter choice: ");
 			switch(asChoice) {
 				case 1:
 					as = Room.AvailabilityStatus.VACANT;
@@ -191,7 +227,10 @@ public class RoomMgr {
 		return as;
 	}
 	
-	private static void wifiMenu() {
+	/*
+	 * This method contains the menu for updating whether wifi is enabled
+	 */
+	private void wifiMenu() {
 		System.out.println("\n+----------------+");
 		System.out.println("| Is there wifi: |");
 		System.out.println("| 1. Yes         |");
@@ -200,15 +239,18 @@ public class RoomMgr {
 		System.out.print("Enter choice: ");
 	}
 	
-	private static boolean selectWifiOption() {
+	/*
+	 * This method returns a boolean whether wifi is enabled based on user's input
+	 * Returns true if wifi is enabled
+	 * Returns false if wifi is not enabled
+	 */
+	private boolean selectWifiOption(Scanner sc) {
 		int wChoice = -1;
-		Scanner sc = new Scanner(System.in);
 		boolean wifiEnabled = false;
 		
 		do {
 			wifiMenu();
-			wChoice = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
+			wChoice = validateChoice(wChoice, "Enter choice: ");
 			switch(wChoice) {
 				case 1:
 					wifiEnabled = true;
@@ -224,7 +266,10 @@ public class RoomMgr {
 		return wifiEnabled;
 	}
 	
-	private static void smokingMenu() {
+	/*
+	 * This method contains the menu for updating whether smoking is allowed
+	 */
+	private void smokingMenu() {
 		System.out.println("\n+---------------------+");
 		System.out.println("| Is smoking allowed: |");
 		System.out.println("| 1. Yes              |");
@@ -233,15 +278,18 @@ public class RoomMgr {
 		System.out.print("Enter choice: ");
 	}
 	
-	private static boolean selectSmokingOption() {
+	/*
+	 * This method returns a boolean whether smoking is allowed based on user's input
+	 * Returns true if smoking is allowed
+	 * Returns false if smoking is not allowed
+	 */
+	private boolean selectSmokingOption(Scanner sc) {
 		int sChoice = -1;
-		Scanner sc = new Scanner(System.in);
 		boolean smokingAllowed = false;
 		
 		do {
 			smokingMenu();
-			sChoice = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
+			sChoice = validateChoice(sChoice, "Enter choice: ");
 			switch(sChoice) {
 				case 1:
 					smokingAllowed = true;
@@ -257,7 +305,10 @@ public class RoomMgr {
 		return smokingAllowed;
 	}
 	
-	private static void updateRoomMenu() {
+	/*
+	 * This method contains the menu for updating the room
+	 */
+	private void updateRoomMenu() {
 		System.out.println("\n+--------------------------------+");
 		System.out.println("| What would you like to update: |");
 		System.out.println("| 0. Nothing                     |");
@@ -273,7 +324,10 @@ public class RoomMgr {
 		System.out.print("Enter choice: ");
 	}
 
-	private static void printRoomDetails(Room r) {
+	/*
+	 * This method prints the room details
+	 */
+	private void printRoomDetails(Room r) {
 		System.out.println("Room id: " + r.getId());
 		System.out.println("Room: " + String.format("%02d-%02d", r.getRoomLevel(), r.getRoomNumber()));
 		System.out.println("Room type: " + r.getRoomType().toString());
@@ -285,7 +339,12 @@ public class RoomMgr {
 		System.out.println("Facing: " + r.getFacing());
 	}
 	
-	private static String boolToString(boolean bool) {
+	/*
+	 * This method returns a String based on the boolean
+	 * Returns Yes if true
+	 * Returns No if false
+	 */
+	private String boolToString(boolean bool) {
 		if (bool) {
 			return "Yes";
 		}
@@ -310,8 +369,6 @@ public class RoomMgr {
 	}
 	
 	public void addRoom() {
-		Scanner sc = new Scanner(System.in);
-		int wChoice = -1, sChoice = -1;
 		Room.RoomType rt = null;
 		Room.BedType bt = null;
 		Room.AvailabilityStatus as = null;
@@ -319,23 +376,21 @@ public class RoomMgr {
 		int rLevel = -1, rNumber = -1;
 		Room r = null;
 		
-		rt = selectRoomType();
-		bt = selectBedType();
+		rt = selectRoomType(sc);
+		bt = selectBedType(sc);
 		float rate = determineRate(rt, bt);
-		as = selectAvailStatus();
-		wifiEnabled = selectWifiOption();
-		smokingAllowed = selectSmokingOption();
+		as = selectAvailStatus(sc);
+		wifiEnabled = selectWifiOption(sc);
+		smokingAllowed = selectSmokingOption(sc);
 		System.out.print("Facing: ");
 		String facing = sc.nextLine();
 		
 		while(!valid) {
 			System.out.print("Enter room level: ");
-			rLevel = sc.nextInt();
-			sc.nextLine();	// clear the "\n" in the buffer
+			rLevel = validateChoice(rLevel, "Enter room level: ");
 			if (rLevel > 1 && rLevel < 8) {
 				System.out.print("Enter room number: ");
-				rNumber = sc.nextInt();
-				sc.nextLine();	// clear the "\n" in the buffer
+				rNumber = validateChoice(rNumber, "Enter room number: ");
 				r = validateRoomNumber(rLevel, rNumber);
 				if (r.equals(null)) {
 					valid = true;
@@ -350,13 +405,13 @@ public class RoomMgr {
 		}
 		
 		roomList.add(new Room(counter, rt, rate, bt, as, wifiEnabled, facing, smokingAllowed, rLevel, rNumber));
+		fileIO.writeObject(roomList.toArray(), Room.class);
 		counter++;
 	}
 	
 	public void updateRoom(String room) {
 		int uChoice = -1;
 		float rate = 0;
-		Scanner sc = new Scanner(System.in);
 		String[] parts = room.split("-");
 		Room r = validateRoomNumber(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
 		if (Objects.equals(r, null)) {
@@ -365,58 +420,63 @@ public class RoomMgr {
 		else {
 			do {
 				updateRoomMenu();
-				uChoice = sc.nextInt();
-				sc.nextLine();	// clear the "\n" in the buffer
+				uChoice = validateChoice(uChoice, "Enter choice: ");
 				switch (uChoice) {
 					case 0:
-						System.out.println("\nThe new room details are:");
+						System.out.println("The new room details are:");
 						printRoomDetails(r);
 						break;
 					case 1:
-						r.setRoomType(selectRoomType());
+						r.setRoomType(selectRoomType(sc));
 						System.out.println("New room type set");
+						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 2:
-						r.setBedType(selectBedType());
+						r.setBedType(selectBedType(sc));
 						System.out.println("New bed type set");
+						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 3:
 						System.out.print("Enter rate: ");
-						rate = sc.nextFloat();
-						sc.nextLine();	// clear the "\n" in the buffer
+						rate = validateRate(rate, "Enter rate: ");
 						r.setRate(rate);
 						System.out.println("New room rate set");
+						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 4:
-						r.setAvailabilityStatus(selectAvailStatus());
+						r.setAvailabilityStatus(selectAvailStatus(sc));
 						System.out.println("New availability status set");
+						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 5:
 						System.out.print("Enter facing: ");
 						r.setFacing(sc.nextLine());
 						System.out.println("New facing set");
+						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 6:
-						r.setWifiEnabled(selectWifiOption());
+						r.setWifiEnabled(selectWifiOption(sc));
 						System.out.println("New wifi option set");
+						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 7:
-						r.setSmokingAllowed(selectSmokingOption());
+						r.setSmokingAllowed(selectSmokingOption(sc));
 						System.out.println("New smoking option set");
+						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 8:
-						r.setRoomType(selectRoomType());
-						r.setBedType(selectBedType());
+						r.setRoomType(selectRoomType(sc));
+						r.setBedType(selectBedType(sc));
 						System.out.print("Enter rate: ");
-						rate = sc.nextFloat();
-						sc.nextLine();	// clear the "\n" in the buffer
+						rate = validateRate(rate, "Enter rate: ");
 						r.setRate(rate);
-						r.setAvailabilityStatus(selectAvailStatus());
+						r.setAvailabilityStatus(selectAvailStatus(sc));
 						System.out.print("Enter facing: ");
 						r.setFacing(sc.nextLine());
 						System.out.println("New facing set");
-						r.setWifiEnabled(selectWifiOption());
-						r.setSmokingAllowed(selectSmokingOption());
+						r.setWifiEnabled(selectWifiOption(sc));
+						r.setSmokingAllowed(selectSmokingOption(sc));
+						fileIO.writeObject(roomList.toArray(), Room.class);
 						System.out.println("Room updated\n\nThe new room details are:");
 						printRoomDetails(r);
 						break;
@@ -483,31 +543,83 @@ public class RoomMgr {
 		}
 		return r;
 	}	
-	public Room isVacant(String room, boolean walkIn) {
-		String[] parts = room.split("-");
-		Room r = validateRoomNumber(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
-		if (Objects.equals(r, null)) {
-			System.out.println("Invalid room");
-		}
-		else {
-			if (!r.getAvailabilityStatus().equals(Room.AvailabilityStatus.VACANT) ) {
-				r = null;
-				System.out.println("Room is not vacant");
-			}
-			else {
-				if (walkIn) {
-					r.setAvailabilityStatus(Room.AvailabilityStatus.OCCUPIED);
-				}
-				else {
-					r.setAvailabilityStatus(Room.AvailabilityStatus.RESERVED);
-				}
+
+	/*
+	 * This method changes the availability status of 2 rooms
+	 * newRoom gets oldRoom status
+	 * oldRoom status = Vacant
+	 * Used when guest changes room
+	 */
+	public void changeRoom(Room oldRoom, Room newRoom) {
+		newRoom.setAvailabilityStatus(oldRoom.getAvailabilityStatus());
+		oldRoom.setAvailabilityStatus(Room.AvailabilityStatus.VACANT);
+	}
+
+	/*
+	 * This method returns the room based on the room id
+	 * Used in ReservationMgr to set the room object
+	 */
+	public Room getRoomById(int id) {
+		Room r = null;
+		
+		for (Room temp : roomList) {
+			if (temp.getId() == id) {
+				r = temp;
+				break;
 			}
 		}
 		return r;
 	}
+	
+	/*
+	 * This method writes the roomList to file
+	 * Mainly used when other class needs room to update the file
+	 */
+	public void writeToFile() {
+		fileIO.writeObject(roomList.toArray(), Room.class);
+	}
 
-	public void changeRoom(Room oldRoom, Room newRoom) {
-		newRoom.setAvailabilityStatus(oldRoom.getAvailabilityStatus());
-		oldRoom.setAvailabilityStatus(Room.AvailabilityStatus.VACANT);
+	/*
+	 * This method is used to ensure that user enters an integer
+	 */
+	private int validateChoice(int choice, String inputText) {
+		boolean valid = false;
+		
+		while (!valid) {
+			if (!sc.hasNextInt()) {
+				System.out.println("Invalid Input. Please enter an integer");
+				sc.nextLine();	// clear the input in the buffer
+				System.out.print(inputText);
+			}
+			else {
+				valid = true;
+				choice = sc.nextInt();
+				sc.nextLine();	// clear the "\n" in the buffer
+			}
+		}
+		
+		return choice;
+	}
+
+	/*
+	 * This method is used to ensure that user enters a proper rate
+	 */
+	private float validateRate(float rate, String inputText) {
+		boolean valid = false;
+		
+		while (!valid) {
+			if (!sc.hasNextFloat()) {
+				System.out.println("Invalid rate. Please enter a rate");
+				sc.nextLine();	// clear the input in the buffer
+				System.out.print(inputText);
+			}
+			else {
+				valid = true;
+				rate = sc.nextFloat();
+				sc.nextLine();	// clear the "\n" in the buffer
+			}
+		}
+		
+		return rate;
 	}
 }
