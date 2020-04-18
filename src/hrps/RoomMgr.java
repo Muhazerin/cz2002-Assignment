@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class RoomMgr {
 	private ArrayList<Room> roomList;
 	private int counter = 1;
-	private FileIO fileIO = new FileIO();
+	private FileIO fileIO;
 	private Scanner sc;
 	
 	/*
@@ -19,6 +19,7 @@ public class RoomMgr {
 	public RoomMgr(Scanner sc) {
 		//System.out.println("RoomMgr");
 		
+		fileIO = new FileIO();
 		roomList = new ArrayList<Room>();
 		this.sc = sc;
 		
@@ -58,7 +59,7 @@ public class RoomMgr {
 			}
 			counter++;
 		}
-		fileIO.writeObject(roomList.toArray(), Room.class); */
+		fileIO.writeObject(roomList.toArray(), Room.class);*/
 		
 		Object[] objArray = fileIO.readObject(Room.class);
 		for (Object o : objArray) {
@@ -113,7 +114,7 @@ public class RoomMgr {
 	/*
 	 * This method returns the room type based on user's input
 	 */
-	private Room.RoomType selectRoomType(Scanner sc) {
+	private Room.RoomType selectRoomType() {
 		int rtChoice = -1;
 		Room.RoomType rt = null;
 		do {
@@ -157,7 +158,7 @@ public class RoomMgr {
 	/*
 	 * This method returns the bed type based on user's input
 	 */
-	private Room.BedType selectBedType(Scanner sc) {
+	private Room.BedType selectBedType() {
 		int btChoice = -1;
 		Room.BedType bt = null;
 		do {
@@ -198,7 +199,7 @@ public class RoomMgr {
 	/*
 	 * This method returns the availability status based on user's input
 	 */
-	private Room.AvailabilityStatus selectAvailStatus(Scanner sc) {
+	private Room.AvailabilityStatus selectAvailStatus() {
 		int asChoice = -1;
 		Room.AvailabilityStatus as = null;
 		
@@ -244,7 +245,7 @@ public class RoomMgr {
 	 * Returns true if wifi is enabled
 	 * Returns false if wifi is not enabled
 	 */
-	private boolean selectWifiOption(Scanner sc) {
+	private boolean selectWifiOption() {
 		int wChoice = -1;
 		boolean wifiEnabled = false;
 		
@@ -283,7 +284,7 @@ public class RoomMgr {
 	 * Returns true if smoking is allowed
 	 * Returns false if smoking is not allowed
 	 */
-	private boolean selectSmokingOption(Scanner sc) {
+	private boolean selectSmokingOption() {
 		int sChoice = -1;
 		boolean smokingAllowed = false;
 		
@@ -376,12 +377,12 @@ public class RoomMgr {
 		int rLevel = -1, rNumber = -1;
 		Room r = null;
 		
-		rt = selectRoomType(sc);
-		bt = selectBedType(sc);
+		rt = selectRoomType();
+		bt = selectBedType();
 		float rate = determineRate(rt, bt);
-		as = selectAvailStatus(sc);
-		wifiEnabled = selectWifiOption(sc);
-		smokingAllowed = selectSmokingOption(sc);
+		as = selectAvailStatus();
+		wifiEnabled = selectWifiOption();
+		smokingAllowed = selectSmokingOption();
 		System.out.print("Facing: ");
 		String facing = sc.nextLine();
 		
@@ -427,12 +428,12 @@ public class RoomMgr {
 						printRoomDetails(r);
 						break;
 					case 1:
-						r.setRoomType(selectRoomType(sc));
+						r.setRoomType(selectRoomType());
 						System.out.println("New room type set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 2:
-						r.setBedType(selectBedType(sc));
+						r.setBedType(selectBedType());
 						System.out.println("New bed type set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
@@ -444,7 +445,7 @@ public class RoomMgr {
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 4:
-						r.setAvailabilityStatus(selectAvailStatus(sc));
+						r.setAvailabilityStatus(selectAvailStatus());
 						System.out.println("New availability status set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
@@ -455,27 +456,27 @@ public class RoomMgr {
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 6:
-						r.setWifiEnabled(selectWifiOption(sc));
+						r.setWifiEnabled(selectWifiOption());
 						System.out.println("New wifi option set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 7:
-						r.setSmokingAllowed(selectSmokingOption(sc));
+						r.setSmokingAllowed(selectSmokingOption());
 						System.out.println("New smoking option set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 8:
-						r.setRoomType(selectRoomType(sc));
-						r.setBedType(selectBedType(sc));
+						r.setRoomType(selectRoomType());
+						r.setBedType(selectBedType());
 						System.out.print("Enter rate: ");
 						rate = validateRate(rate, "Enter rate: ");
 						r.setRate(rate);
-						r.setAvailabilityStatus(selectAvailStatus(sc));
+						r.setAvailabilityStatus(selectAvailStatus());
 						System.out.print("Enter facing: ");
 						r.setFacing(sc.nextLine());
 						System.out.println("New facing set");
-						r.setWifiEnabled(selectWifiOption(sc));
-						r.setSmokingAllowed(selectSmokingOption(sc));
+						r.setWifiEnabled(selectWifiOption());
+						r.setSmokingAllowed(selectSmokingOption());
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						System.out.println("Room updated\n\nThe new room details are:");
 						printRoomDetails(r);
@@ -544,16 +545,16 @@ public class RoomMgr {
 		return r;
 	}	
 
-	/*
-	 * This method changes the availability status of 2 rooms
-	 * newRoom gets oldRoom status
-	 * oldRoom status = Vacant
-	 * Used when guest changes room
-	 */
-	public void changeRoom(Room oldRoom, Room newRoom) {
-		newRoom.setAvailabilityStatus(oldRoom.getAvailabilityStatus());
-		oldRoom.setAvailabilityStatus(Room.AvailabilityStatus.VACANT);
-	}
+//	/*
+//	 * This method changes the availability status of 2 rooms
+//	 * newRoom gets oldRoom status
+//	 * oldRoom status = Vacant
+//	 * Used when guest changes room
+//	 */
+//	public void changeRoom(Room oldRoom, Room newRoom) {
+//		newRoom.setAvailabilityStatus(oldRoom.getAvailabilityStatus());
+//		oldRoom.setAvailabilityStatus(Room.AvailabilityStatus.VACANT);
+//	}
 
 	/*
 	 * This method returns the room based on the room id

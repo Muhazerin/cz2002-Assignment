@@ -11,7 +11,6 @@ public class Reservation implements Serializable{
 	}
 	
 	private static final long serialVersionUID = 1234L;
-	private static int counter = 1;
 	private int resCode;
 	private Guest guest;
 	private Room room;
@@ -25,9 +24,8 @@ public class Reservation implements Serializable{
 	/*
 	 * Default constructor for reservation
 	 */
-	public Reservation() {
+	public Reservation(int counter) {
 		this.resCode = counter;
-		counter++;
 		this.guest = null;
 		this.room = null;
 		this.checkInDate = null;
@@ -182,7 +180,7 @@ public class Reservation implements Serializable{
 	 * Returns "Yes" if true
 	 * Returns "No" if false
 	 */
-	private static String boolToString(boolean bool) {
+	private String boolToString(boolean bool) {
 		if (bool) {
 			return "Yes";
 		}

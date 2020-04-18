@@ -58,7 +58,7 @@ public class Payment{
 	/*
 	 * This method contains the menu for payment method
 	 */
-	private static void payMenu() {
+	private void payMenu() {
 		System.out.println("\n+--------------------------------+");
 		System.out.println("| How would you like to pay:     |");
 		System.out.println("| 1. Cash                        |");
