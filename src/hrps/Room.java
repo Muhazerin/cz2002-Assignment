@@ -149,15 +149,12 @@ public class Room implements Serializable{
 		this.facing = facing;
 	}
 	
-	
-	
 	/* 
 	 * This method returns a boolean whether smoking is allowed in the room
 	 */
 	public boolean getSmokingAllowed() {
 		return smokingAllowed;
 	}
-	
 	
 	/*
 	 * This method sets whether smoking is allowed in the room
@@ -194,26 +191,4 @@ public class Room implements Serializable{
 		this.roomNumber = roomNumber;
 	}
 	
-	/*
-	public void addRoomService(RoomService rs) {
-		this.roomService.add(rs);
-	}
-	
-	public ArrayList<RoomService> getRoomService() {
-		return this.roomService;
-	}
-	
-	public float getRoomServicePrice() {
-		float total = 0;
-		for(int i = 0; i < this.roomService.size(); i++ ) {
-			//add up the costs of each room service
-			total += this.roomService.get(i).getMenuItemsTotalCost();
-		}
-		return total;
-	}
-	
-	public void clearRoomService() {
-		this.roomService.clear();
-	}
-	*/
 }
