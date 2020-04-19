@@ -42,7 +42,7 @@ public class GuestMgr {
 		name = sc.nextLine();
 		System.out.print("Enter ID: ");
 		id = sc.nextLine();
-		System.out.print("Enter gender: ");
+		System.out.print("Enter gender(M/F): ");
 		gender = sc.nextLine();
 		System.out.print("Enter address: ");
 		address = sc.nextLine();

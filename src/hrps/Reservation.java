@@ -3,6 +3,9 @@ package hrps;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import hrps.RoomService.OrderType;
+
 import java.io.Serializable;
 
 public class Reservation implements Serializable{
@@ -145,6 +148,7 @@ public class Reservation implements Serializable{
 	 * This method prints the reservation details
 	 */
 	public void printReceipt() {
+		System.out.println("-------------------------------------Reservation Details-----------------------------------------");
 		System.out.println("\nThis is your reservation details.");
 		System.out.println("Reservation Code: " + resCode);
 		System.out.println("Reservation Status: " + this.getStatus().toString());

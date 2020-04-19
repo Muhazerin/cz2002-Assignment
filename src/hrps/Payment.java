@@ -6,6 +6,8 @@ import java.time.temporal.ChronoField;
 import java.time.Period;
 import java.util.Scanner;
 
+import hrps.RoomService.OrderType;
+
 public class Payment{
 	
 	private double taxRate;
@@ -35,13 +37,13 @@ public class Payment{
 		if (rs.getRoomServiceList().size() != 0) {
 			System.out.println("Room Service Charges:");
 			getRoomServicePriceList();
-			System.out.println("Total Room Service Charge: + $SGD" + rs.getRoomServicePrice());
+			System.out.printf("Total Room Service Charge: + $SGD%.2f\n",rs.getRoomServicePrice());
 		}
 
 		if(calculateDiscount() != 0)
-			System.out.println("Discount: - $SGD" + calculateDiscount());
-		System.out.println("Tax Charge: + $SGD" + calculateTaxCharge());
-		System.out.println("Total bill is: $SGD" + calculateTotalBill());
+			System.out.printf("Discount: - $SGD%.2f\n",calculateDiscount());
+		System.out.printf("Tax Charge: + $SGD%.2f\n",calculateTaxCharge());
+		System.out.printf("Total bill is: $SGD%.2f",calculateTotalBill());
 	}
 	
 	/*
@@ -51,6 +53,8 @@ public class Payment{
 		ArrayList<RoomService> rsL = rs.getRoomServiceList();
 		for (RoomService roomService : rsL) {
 			System.out.println("Room Service <"+ rsL.indexOf(roomService)+1 +">");
+			//during payment change all room service status to delivered.
+			roomService.setOrderStatus(OrderType.DELIVERED);
 			roomService.printOrder();
 		}
 	}
