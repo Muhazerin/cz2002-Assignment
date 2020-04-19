@@ -3,6 +3,9 @@ package hrps;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
+
+import hrps.Reservation.ResStatus;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -22,7 +25,7 @@ public class ReservationMgr {
 	 * Do some variable initialization and retrieve reservation from file
 	 */
 	public ReservationMgr(GuestMgr guestMgr, RoomMgr roomMgr, RoomServiceMgr rsMgr, Scanner sc) {	
-		//System.out.println("Reservation Mgr");
+
 		
 		reservationList = new ArrayList<Reservation>();
 		fileIO = new FileIO();
@@ -227,6 +230,11 @@ public class ReservationMgr {
 	 */
 	public void printAllReservation() {
 		for (Reservation res : reservationList) {
+			//if the date of the reservation check in has passed
+			if(res.getCheckInDate().isBefore(LocalDate.now())) {
+				//set reservation status to expired.
+				res.setStatus(ResStatus.EXPIRED);
+			}
 			if (res.getStatus() != Reservation.ResStatus.EXPIRED) {
 				res.printReceipt();
 			}

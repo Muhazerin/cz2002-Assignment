@@ -37,6 +37,15 @@ public class MenuItemMgr {
 		float price = 0;
 		System.out.print("Enter name: ");
 		name = sc.nextLine();
+		
+		//checks if menu item of same name already exists.
+		if(searchMenuItems(name) != null) {
+			//if it does print out error message and exit.
+			System.out.println("Menu Item already exists.");
+			return;
+		}
+		
+		
 		System.out.print("Enter description: ");
 		desc = sc.nextLine();
 		System.out.print("Enter price: $");
@@ -46,7 +55,7 @@ public class MenuItemMgr {
 		
 		fileIO.writeObject(menuItemList.toArray(), MenuItem.class);
 		
-		System.out.println("Menu Item added");
+		System.out.println("New Menu Item added");
 	}
 	
 	/*
@@ -92,10 +101,11 @@ public class MenuItemMgr {
 		}
 		else {
 			for (MenuItem mItem : menuItemList) {
+				System.out.println("+---------------------------------+");
 				System.out.println("ID: " + mItem.getID());
 				System.out.println("Name: " + mItem.getName());
 				System.out.println("Description: " + mItem.getDescription());
-				System.out.println("Price: " + mItem.getPrice() + "\n");
+				System.out.println("Price: $" + mItem.getPrice() + "\n");
 			}
 		}
 	}

@@ -42,7 +42,9 @@ public class FileIO {
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found");
 		} catch (IOException e) {
-			System.out.println("Error initializing stream: " + e.getMessage());
+			if(e.getMessage() != null) {
+				System.out.println("Error initializing stream: " + e.getMessage());
+			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -71,8 +73,6 @@ public class FileIO {
 	} // end of writeObject class
 	
 	// write only 1 object
-	// still testing
-	// will think of a better algo
 	public void writeObjectSingle (Object obj, Class<?> cls) {
 		directory = cls + ".txt";
 		Object[] stored = readObject(cls);

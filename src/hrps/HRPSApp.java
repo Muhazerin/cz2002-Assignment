@@ -32,7 +32,7 @@ public class HRPSApp {
 					guestOption(guestMgr, sc);
 					break;
 				case 2:
-					roomOption(rMgr, sc);
+					roomOption(resMgr, rMgr, sc);
 					break;
 				case 3:
 					reservationOption(guestMgr, rMgr, resMgr, rsMgr, miMgr, sc);
@@ -80,7 +80,7 @@ public class HRPSApp {
 		System.out.println("| What would you like to do?                          |");
 		System.out.println("| 0. Exit the program                                 |");
 		System.out.println("| 1. Update/Search guest details                      |");
-		System.out.println("| 2. Create/Update/List room                          |");
+		System.out.println("| 2. Create/Update/List/Get details room              |");
 		System.out.println("| 3. Create/Update/Remove/Print reservation           |");
 		System.out.println("| 4. Create/Update/Remove/List menu items             |");
 		System.out.println("| 5. Create/Update/Remove/Print room service          |");
@@ -191,6 +191,7 @@ public class HRPSApp {
 		System.out.println("| 1. Create new room                       |");
 		System.out.println("| 2. Update room details                   |");
 		System.out.println("| 3. List Room                             |");
+		System.out.println("| 4. Check room details                    |");
 		System.out.println("+------------------------------------------+");
 		System.out.print("Enter choice: ");
 	}
@@ -198,7 +199,7 @@ public class HRPSApp {
 	/*
 	 * This method allows the user to deal with room objects
 	 */
-	private static void roomOption(RoomMgr rMgr, Scanner sc) {
+	private static void roomOption(ReservationMgr resMgr, RoomMgr rMgr, Scanner sc) {
 		int choice = -1;
 		
 		do {
@@ -218,12 +219,62 @@ public class HRPSApp {
 				case 3:
 					listRoom(rMgr, sc);
 					break;
+				case 4: //Check room details
+
+					//prompt for option to search by guest name or room id.	
+					getRoomDetails(resMgr, rMgr,sc);
+					
+			        //l
+					break;
 				default:
 					System.out.println("Invalid choice");
 					break;
 			}
 		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3);
 	}
+	
+	/*
+	 * This method contains the different menu for listing rooms
+	 */
+	private static void listRoomDetailsMenu() {
+		System.out.println("\n+--------------------------------+");
+		System.out.println("| Get Room details by:           |");
+		System.out.println("| 1. Room number                 |");
+		System.out.println("| 2. Guest name                  |");
+		System.out.println("+--------------------------------+");
+		System.out.print("Enter choice: ");
+	}
+	
+	/*
+	 * This method gets room details based on user's input
+	 */
+	private static void  getRoomDetails(ReservationMgr resMgr, RoomMgr rMgr, Scanner sc) {
+		int choice = -1;
+		do {
+			listRoomDetailsMenu();
+			choice = validateChoice(choice, sc);
+			switch (choice) {
+				case 1: //search for room by room number id.
+					System.out.print("Please enter the room number: ");
+					String roomNo = sc.nextLine();		
+					rMgr.getRoomDetailsByNumber(roomNo);
+					break;
+				case 2: //search for room by guest name.
+					
+					Reservation res = resMgr.searchReservation();
+					if(res == null) {
+						System.out.println("You have entered an invalid guest name.");
+					}else {
+						rMgr.printRoomDetails(res.getRoom());
+					}
+					break;
+				default:
+					System.out.println("Invalid Choice");
+					break;
+			}
+		} while (choice != 1 && choice != 2);
+	}
+	
 	
 	/*
 	 * This method contains the different menu for listing rooms
@@ -361,7 +412,7 @@ public class HRPSApp {
 	private static void addRoomService(ReservationMgr resMgr, RoomServiceMgr rsMgr, MenuItemMgr miMgr) {
 		Reservation res = resMgr.searchReservation();
 		if (Objects.equals(res, null)) {
-			System.out.println("Reservation does not exist");
+			System.out.println("Guest does not exist");
 			return;
 		}
 					

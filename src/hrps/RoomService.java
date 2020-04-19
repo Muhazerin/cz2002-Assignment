@@ -36,14 +36,15 @@ public class RoomService implements Serializable{
 	}
 	
 	public void printOrder() {
-		System.out.println("Summary of orders:");
+		System.out.println("---------------Summary of order------------------");
 		System.out.println("Room Service Id: " + this.id);
 		System.out.println("Ordered on: " + this.dateTime.toString());
 		System.out.println("Order status: " + this.getOrderStatus().toString());
 		for (MenuItem mi : menuItemList) {
-			System.out.println("Food ordered: " + mi.getName());
+			System.out.println("Menu Item Ordered: " + mi.getName());
 			System.out.println("Price: $" + mi.getPrice());
 		}
+		System.out.println("---------------------End------------------------");
 	}
 	
 	public float getMenuItemTotalCost() {
