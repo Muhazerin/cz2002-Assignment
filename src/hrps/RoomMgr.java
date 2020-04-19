@@ -13,7 +13,7 @@ public class RoomMgr {
 	/*
 	 * Constructor for RoomMgr class
 	 * Contains some initialization
-	 * Can re-create the 48 rooms if I fucked it up
+	 * Can re-create the 48 rooms
 	 * Can retrieve the rooms from the file
 	 */
 	public RoomMgr(Scanner sc) {
@@ -22,50 +22,54 @@ public class RoomMgr {
 		roomList = new ArrayList<Room>();
 		this.sc = sc;
 		
-		// in case i fucked up the room, this code re-creates the rooms and writes it back to the file
-		/*int roomNumber = 1;
-		 for (int i = 0; i < 48; i++) {
-			if (i == 6 || i == 12 || i == 18 || i == 24 || i == 36) {
-				roomNumber = 1;
-			}
-			if (i < 12) {
-				if (i < 6) {
-					roomList.add(new Room(counter, Room.RoomType.SINGLE, (float)1.00, Room.BedType.SINGLE, Room.AvailabilityStatus.VACANT, true, "nice view", false, 2, roomNumber));
-					roomNumber++;
-				}
-				else {
-					roomList.add(new Room(counter, Room.RoomType.SINGLE, (float)2.00, Room.BedType.DOUBLE, Room.AvailabilityStatus.VACANT, true, "nice view", false, 3, roomNumber));
-					roomNumber++;
-				}
-			}
-			else if (i >= 12 && i < 24){
-				if (i < 18) {
-					roomList.add(new Room(counter, Room.RoomType.STANDARD, (float)3.00, Room.BedType.SINGLE, Room.AvailabilityStatus.VACANT, true, "nice view", false, 4, roomNumber));
-					roomNumber++;
-				}
-				else {
-					roomList.add(new Room(counter, Room.RoomType.STANDARD, (float)4.00, Room.BedType.DOUBLE, Room.AvailabilityStatus.VACANT, true, "nice view", false, 5, roomNumber));
-					roomNumber++;
-				}
-			}
-			else if (i >= 24 && i < 36) {
-				roomList.add(new Room(counter, Room.RoomType.VIP_SUITE, (float)5.00, Room.BedType.MASTER, Room.AvailabilityStatus.VACANT, true, "nice view", false, 6, roomNumber));
-				roomNumber++;
-			}
-			else {
-				roomList.add(new Room(counter, Room.RoomType.DELUXE, (float)6.00, Room.BedType.MASTER, Room.AvailabilityStatus.VACANT, true, "nice view", false, 7, roomNumber));
-				roomNumber++;
-			}
-			counter++;
-		}
-		fileIO.writeObject(roomList.toArray(), Room.class); */
-		
+		//re-creates the rooms and writes it back to the file
 		Object[] objArray = fileIO.readObject(Room.class);
-		for (Object o : objArray) {
-			Room r = (Room) o;
-			roomList.add(r);
+		
+		if(objArray.length == 0) {
+			int roomNumber = 1;
+			 for (int i = 0; i < 48; i++) {
+				if (i == 6 || i == 12 || i == 18 || i == 24 || i == 36) {
+					roomNumber = 1;
+				}
+				if (i < 12) {
+					if (i < 6) {
+						roomList.add(new Room(counter, Room.RoomType.SINGLE, (float)50.00, Room.BedType.SINGLE, Room.AvailabilityStatus.VACANT, true, "nice view", false, 2, roomNumber));
+						roomNumber++;
+					}
+					else {
+						roomList.add(new Room(counter, Room.RoomType.SINGLE, (float)75.00, Room.BedType.DOUBLE, Room.AvailabilityStatus.VACANT, true, "nice view", false, 3, roomNumber));
+						roomNumber++;
+					}
+				}
+				else if (i >= 12 && i < 24){
+					if (i < 18) {
+						roomList.add(new Room(counter, Room.RoomType.STANDARD, (float)100.00, Room.BedType.SINGLE, Room.AvailabilityStatus.VACANT, true, "nice view", false, 4, roomNumber));
+						roomNumber++;
+					}
+					else {
+						roomList.add(new Room(counter, Room.RoomType.STANDARD, (float)125.00, Room.BedType.DOUBLE, Room.AvailabilityStatus.VACANT, true, "nice view", false, 5, roomNumber));
+						roomNumber++;
+					}
+				}
+				else if (i >= 24 && i < 36) {
+					roomList.add(new Room(counter, Room.RoomType.VIP_SUITE, (float)150.00, Room.BedType.MASTER, Room.AvailabilityStatus.VACANT, true, "nice view", false, 6, roomNumber));
+					roomNumber++;
+				}
+				else {
+					roomList.add(new Room(counter, Room.RoomType.DELUXE, (float)175.00, Room.BedType.MASTER, Room.AvailabilityStatus.VACANT, true, "nice view", false, 7, roomNumber));
+					roomNumber++;
+				}
+				counter++;
+			}
+			fileIO.writeObject(roomList.toArray(), Room.class); 
+		}else {
+			for (Object o : objArray) {
+				Room r = (Room) o;
+				roomList.add(r);
+			}
+			counter = roomList.size() + 1;
 		}
-		counter = roomList.size() + 1;
+
 	}
 	
 	/*
@@ -74,25 +78,25 @@ public class RoomMgr {
 	private float determineRate(Room.RoomType rType, Room.BedType bType) {
 		if (rType.equals(Room.RoomType.SINGLE)) {
 			if (bType.equals(Room.BedType.SINGLE)) {
-				return 1;
+				return 50;
 			}
 			else {
-				return 2;
+				return 75;
 			}
 		}
 		else if (rType.equals(Room.RoomType.STANDARD)) {
 			if (bType.equals(Room.BedType.SINGLE)) {
-				return 3;
+				return 100;
 			}
 			else {
-				return 4;
+				return 125;
 			}
 		}
 		else if (rType.equals(Room.RoomType.VIP_SUITE)) {
-			return 5;
+			return 150;
 		}
 		else {
-			return 6;
+			return 175;
 		}
 	}
 	
@@ -327,12 +331,13 @@ public class RoomMgr {
 	/*
 	 * This method prints the room details
 	 */
-	private void printRoomDetails(Room r) {
-		System.out.println("Room id: " + r.getId());
-		System.out.println("Room: " + String.format("%02d-%02d", r.getRoomLevel(), r.getRoomNumber()));
+	public void printRoomDetails(Room r) {
+		System.out.println("\n+----------Room Details------------+");
+		System.out.println("Room ID: " + r.getId());
+		System.out.println("Room number: " + String.format("%02d-%02d", r.getRoomLevel(), r.getRoomNumber()));
 		System.out.println("Room type: " + r.getRoomType().toString());
 		System.out.println("Bed Type: " + r.getBedType().toString());
-		System.out.println("Room rate: " + r.getRate());
+		System.out.println("Room rate: $" + r.getRate());
 		System.out.println("Availability Status: " + r.getAvailabilityStatus().toString());
 		System.out.println("Wifi Enabled: " + boolToString(r.isWifiEnabled()));
 		System.out.println("Smoking Allowed: " + boolToString(r.getSmokingAllowed()));
@@ -392,7 +397,7 @@ public class RoomMgr {
 				System.out.print("Enter room number: ");
 				rNumber = validateChoice(rNumber, "Enter room number: ");
 				r = validateRoomNumber(rLevel, rNumber);
-				if (r.equals(null)) {
+				if (r == null) {
 					valid = true;
 				}
 				else {
@@ -403,16 +408,34 @@ public class RoomMgr {
 				System.out.println("Invalid room level");
 			}
 		}
-		
-		roomList.add(new Room(counter, rt, rate, bt, as, wifiEnabled, facing, smokingAllowed, rLevel, rNumber));
+
+		Room newRoom = new Room(counter, rt, rate, bt, as, wifiEnabled, facing, smokingAllowed, rLevel, rNumber);
+		roomList.add(newRoom);
+		System.out.println("New room "+ newRoom.getRoomLevel()+"-"+newRoom.getRoomNumber()+" has been created.");
 		fileIO.writeObject(roomList.toArray(), Room.class);
 		counter++;
+	}
+	
+	private boolean isStringInt(String s)
+	{
+	    try
+	    {
+	        Integer.parseInt(s);
+	        return true;
+	    } catch (NumberFormatException ex)
+	    {
+	        return false;
+	    }
 	}
 	
 	public void updateRoom(String room) {
 		int uChoice = -1;
 		float rate = 0;
 		String[] parts = room.split("-");
+		if(!isStringInt(parts[0]) || !isStringInt(parts[1])){
+			System.out.println("Invalid format");
+			return;
+		}
 		Room r = validateRoomNumber(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
 		if (Objects.equals(r, null)) {
 			System.out.println("Invalid room");
@@ -570,6 +593,17 @@ public class RoomMgr {
 		}
 		return r;
 	}
+	
+	public void getRoomDetailsByNumber(String roomNo) {
+		String[] parts = roomNo.split("-");
+		Room r = validateRoomNumber(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+		if(r == null) {
+			System.out.println("Invalid Room Number.");
+		}else {
+			printRoomDetails(r);
+		}
+	}
+
 	
 	/*
 	 * This method writes the roomList to file
