@@ -1,4 +1,4 @@
-package hrps;
+package entity;
 
 //a) Hotel staff can order room service meals on guest's behalf upon his/her request.
 //b) List of menu items selection will be displayed for selection.
@@ -9,6 +9,9 @@ package hrps;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import entity.RoomService.OrderType;
+
 import java.io.Serializable;
 
 public class RoomService implements Serializable{
@@ -36,15 +39,28 @@ public class RoomService implements Serializable{
 	}
 	
 	public void printOrder() {
-		System.out.println("---------------Summary of order------------------");
-		System.out.println("Room Service Id: " + this.id);
-		System.out.println("Ordered on: " + this.dateTime.toString());
-		System.out.println("Order status: " + this.getOrderStatus().toString());
-		for (MenuItem mi : menuItemList) {
-			System.out.println("Menu Item Ordered: " + mi.getName());
-			System.out.println("Price: $" + mi.getPrice());
-		}
-		System.out.println("---------------------End------------------------");
+//		System.out.println("---------------Summary of order------------------");
+//		System.out.println("Room Service Id: " + this.id);
+//		System.out.println("Ordered on: " + this.dateTime.toString());
+//		System.out.println("Order status: " + this.getOrderStatus().toString());
+//		for (MenuItem mi : menuItemList) {
+//			System.out.println("Menu Item Ordered: " + mi.getName());
+//			System.out.println("Price: $" + mi.getPrice());
+//		}
+//		System.out.println("---------------------End------------------------");
+		
+		Invoice invoice = new RoomServiceInvoice(menuItemList, this); 
+		invoice.printInvoice();
+				
+				
+	}
+	
+	public ArrayList<MenuItem> getMenuItemsList(){
+		return this.menuItemList;
+	}
+	
+	public LocalDate getDateTime() {
+		return this.dateTime;
 	}
 	
 	public float getMenuItemTotalCost() {

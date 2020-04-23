@@ -1,7 +1,10 @@
-package hrps;
+package control;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import entity.CreditCard;
+import entity.Guest;
 
 public class GuestMgr {
 	private ArrayList<Guest> guestList;

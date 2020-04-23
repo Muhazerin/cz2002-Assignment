@@ -1,4 +1,4 @@
-package hrps;
+package entity;
 
 import java.util.ArrayList;
 import java.time.DayOfWeek;
@@ -6,7 +6,7 @@ import java.time.temporal.ChronoField;
 import java.time.Period;
 import java.util.Scanner;
 
-import hrps.RoomService.OrderType;
+import entity.RoomService.OrderType;
 
 public class Payment{
 	
@@ -16,7 +16,7 @@ public class Payment{
 	private Reservation rs;
 	private Scanner sc;
 	
-	/*
+	/*	
 	 * Constructor for Payment class
 	 * Initialize the taxRate, weekendRate, discountRate, Reservation, and Scanner class
 	 */
@@ -31,21 +31,11 @@ public class Payment{
 	/*
 	 * This method prints the bill
 	 */
-	public void billReport() {
-		System.out.println("\nHotel Checkout Bill Report");
-		System.out.println("Total Room Charge(Weekdays: "+ calculateWeekdays() +", Weekends: "+ calculateWeekends() +"): " + "$SGD" + calculateRoomCharge());
-		if (rs.getRoomServiceList().size() != 0) {
-			System.out.println("Room Service Charges:");
-			getRoomServicePriceList();
-			System.out.printf("Total Room Service Charge: + $SGD%.2f\n",rs.getRoomServicePrice());
-		}
-
-		if(calculateDiscount() != 0)
-			System.out.printf("Discount: - $SGD%.2f\n",calculateDiscount());
-		System.out.printf("Tax Charge: + $SGD%.2f\n",calculateTaxCharge());
-		System.out.printf("Total bill is: $SGD%.2f",calculateTotalBill());
+	public void billReport(Invoice invoice) {
+		invoice.printInvoice();
 	}
 	
+
 	/*
 	 * This method prints all of the room service's order
 	 */
@@ -62,7 +52,7 @@ public class Payment{
 	/*
 	 * This method contains the menu for payment method
 	 */
-	private static void payMenu() {
+	private void payMenu() {
 		System.out.println("\n+--------------------------------+");
 		System.out.println("| How would you like to pay:     |");
 		System.out.println("| 1. Cash                        |");
@@ -109,7 +99,7 @@ public class Payment{
 	/*
 	 * This method calculates the number of weekends the user spent in the hotel 
 	 */
-	private int calculateWeekends() {
+	public int calculateWeekends() {
 		int weekends = 0;
 		Period stay = Period.between(rs.getCheckInDate(), rs.getCheckOutDate()); //Get the period between check in date and check out date.
 	  	int totalDays = stay.getDays(); //Calculate the total days between check in date and check out date.
@@ -124,7 +114,7 @@ public class Payment{
 	/*
 	 * This method calculates the number of weekdays the user spent in the hotel
 	 */
-	private int calculateWeekdays() {
+	public int calculateWeekdays() {
 		int weekdays = 0;
 		Period stay = Period.between(rs.getCheckInDate(), rs.getCheckOutDate()); //Get the period between check in date and check out date.
 	  	int totalDays = stay.getDays(); //Calculate the total days between check in date and check out date.
@@ -140,7 +130,7 @@ public class Payment{
 	 * This method calculate the total room charge
 	 * Return totalDay*roomRate
 	 */
-	private float calculateRoomCharge() {
+	public float calculateRoomCharge() {
 		float totalPrice = 0;
 		Period stay = Period.between(rs.getCheckInDate(), rs.getCheckOutDate()); //Get the period between check in date and check out date.
 	  	int totalDays = stay.getDays(); //Calculate the total days between check in date and check out date.
@@ -174,7 +164,7 @@ public class Payment{
 	/*
 	 * This method calculate the total bill based on the discount and tax
 	 */
-	private double calculateTotalBill() {
+	public double calculateTotalBill() {
 		return (rs.getRoomServicePrice() + calculateRoomCharge() - calculateDiscount()) + calculateTaxCharge();
 	}
 

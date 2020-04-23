@@ -1,10 +1,14 @@
-package hrps;
+package control;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
-import hrps.Reservation.ResStatus;
+import entity.Guest;
+import entity.Reservation;
+import entity.Room;
+import entity.RoomService;
+import entity.Reservation.ResStatus;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +22,7 @@ public class ReservationMgr {
 	private RoomMgr roomMgr;
 	private RoomServiceMgr rsMgr;
 	private Scanner sc;
+	private int counter = 1;
 	
 	/*
 	 * Constructor method of this ReservationMgr class
@@ -48,6 +53,7 @@ public class ReservationMgr {
 					res.addRoomServiceNoPrintOrder(rs);
 				}
 			}
+			counter = reservationList.size() + 1;
 			
 			res.setRoom(room);
 			res.setGuest(g);
@@ -78,7 +84,8 @@ public class ReservationMgr {
 			room = roomMgr.isVacant(s);
 		}
 		
-		Reservation r = new Reservation();
+		Reservation r = new Reservation(counter);
+		counter++;
 		int noOfAdults = 0, noOfChildren = 0;
 		
 		// set the check in date and reservation status
@@ -425,7 +432,7 @@ public class ReservationMgr {
 			room = roomMgr.isVacant(s);
 		}
 		
-		Reservation r = new Reservation();
+		Reservation r = new Reservation(counter);
 		int noOfAdults = 0, noOfChildren = 0;
 		
 		r.setCheckInDate(LocalDate.now());

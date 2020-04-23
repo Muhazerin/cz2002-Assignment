@@ -1,10 +1,10 @@
-package hrps;
+package entity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import hrps.RoomService.OrderType;
+import entity.RoomService.OrderType;
 
 import java.io.Serializable;
 
@@ -14,7 +14,6 @@ public class Reservation implements Serializable{
 	}
 	
 	private static final long serialVersionUID = 1234L;
-	private static int counter = 1;
 	private int resCode;
 	private Guest guest;
 	private Room room;
@@ -28,9 +27,8 @@ public class Reservation implements Serializable{
 	/*
 	 * Default constructor for reservation
 	 */
-	public Reservation() {
+	public Reservation(int counter) {
 		this.resCode = counter;
-		counter++;
 		this.guest = null;
 		this.room = null;
 		this.checkInDate = null;
@@ -186,7 +184,7 @@ public class Reservation implements Serializable{
 	 * Returns "Yes" if true
 	 * Returns "No" if false
 	 */
-	private static String boolToString(boolean bool) {
+	private String boolToString(boolean bool) {
 		if (bool) {
 			return "Yes";
 		}
@@ -239,8 +237,12 @@ public class Reservation implements Serializable{
 	}
 
 	public double getRoomServicePrice() {
+		return this.CalcRoomService(roomServiceList);
+	}
+	
+	static public double CalcRoomService(ArrayList<RoomService> rsList) {
 		double total = 0;
-		for (RoomService rs : roomServiceList) {
+		for (RoomService rs : rsList) {
 			total += rs.getMenuItemTotalCost();
 		}
 		return total;

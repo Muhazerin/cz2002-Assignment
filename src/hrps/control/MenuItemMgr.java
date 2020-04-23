@@ -1,8 +1,10 @@
-package hrps;
+package control;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
+
+import entity.MenuItem;
 
 public class MenuItemMgr {
 	private ArrayList<MenuItem> menuItemList;

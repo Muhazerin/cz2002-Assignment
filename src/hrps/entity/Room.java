@@ -1,4 +1,4 @@
-package hrps;
+package entity;
 
 import java.io.Serializable;
 

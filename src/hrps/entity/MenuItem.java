@@ -1,4 +1,4 @@
-package hrps;
+package entity;
 
 import java.io.Serializable;
 
@@ -26,14 +26,14 @@ public class MenuItem implements Serializable
 	/**
 	* Default Constructor
 	*/
-	MenuItem () 
+	public MenuItem () 
 	{
 	  super();
 	} // end of default constructor
 	/**
 	 * Overloaded Constructor to create an instance of MenuItem object.
 	 */
-	MenuItem (int id, String name, String description, float price)
+	public MenuItem (int id, String name, String description, float price)
 	{
 	  this.id = id;
 	  this.name = name;
