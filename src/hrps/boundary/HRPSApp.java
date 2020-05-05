@@ -1,8 +1,20 @@
-package hrps;
+package boundary;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
+
+import control.GuestMgr;
+import control.MenuItemMgr;
+import control.ReservationMgr;
+import control.RoomMgr;
+import control.RoomServiceMgr;
+import entity.CheckOutInvoice;
+import entity.Invoice;
+import entity.MenuItem;
+import entity.Payment;
+import entity.Reservation;
+import entity.RoomService;
 
 public class HRPSApp {
 	
@@ -485,7 +497,8 @@ public class HRPSApp {
 		
 		if (!Objects.equals(res, null)) {
 			Payment p = new Payment(res, sc);
-			p.billReport();
+			Invoice invoice = new CheckOutInvoice(res.getRoomServiceList(), p);
+			p.billReport(invoice);
 			p.payment();
 		}
 	}

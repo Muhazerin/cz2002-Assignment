@@ -1,9 +1,14 @@
-package hrps;
+package entity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
+<<<<<<< HEAD:src/hrps/Reservation.java
+=======
+import entity.RoomService.OrderType;
+
+>>>>>>> b3eb5b1210ece8de6499b59808c00fa2f142987d:src/hrps/entity/Reservation.java
 import java.io.Serializable;
 
 public class Reservation implements Serializable{
@@ -235,8 +240,12 @@ public class Reservation implements Serializable{
 	}
 
 	public double getRoomServicePrice() {
+		return this.CalcRoomService(roomServiceList);
+	}
+	
+	static public double CalcRoomService(ArrayList<RoomService> rsList) {
 		double total = 0;
-		for (RoomService rs : roomServiceList) {
+		for (RoomService rs : rsList) {
 			total += rs.getMenuItemTotalCost();
 		}
 		return total;

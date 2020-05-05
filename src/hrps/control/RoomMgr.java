@@ -1,13 +1,15 @@
-package hrps;
+package control;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
+import entity.Room;
+
 public class RoomMgr {
 	private ArrayList<Room> roomList;
 	private int counter = 1;
-	private FileIO fileIO;
+	private FileIO fileIO = new FileIO();
 	private Scanner sc;
 	
 	/*
@@ -19,11 +21,14 @@ public class RoomMgr {
 	public RoomMgr(Scanner sc) {
 		//System.out.println("RoomMgr");
 		
-		fileIO = new FileIO();
 		roomList = new ArrayList<Room>();
 		this.sc = sc;
 		
+<<<<<<< HEAD:src/hrps/RoomMgr.java
 		//re-creates the rooms and writes it back to the file if the file is empty
+=======
+		//re-creates the rooms and writes it back to the file
+>>>>>>> b3eb5b1210ece8de6499b59808c00fa2f142987d:src/hrps/control/RoomMgr.java
 		Object[] objArray = fileIO.readObject(Room.class);
 		
 		if(objArray.length == 0) {
@@ -70,6 +75,10 @@ public class RoomMgr {
 			}
 			counter = roomList.size() + 1;
 		}
+<<<<<<< HEAD:src/hrps/RoomMgr.java
+=======
+
+>>>>>>> b3eb5b1210ece8de6499b59808c00fa2f142987d:src/hrps/control/RoomMgr.java
 	}
 	
 	/*
@@ -117,7 +126,7 @@ public class RoomMgr {
 	/*
 	 * This method returns the room type based on user's input
 	 */
-	private Room.RoomType selectRoomType() {
+	private Room.RoomType selectRoomType(Scanner sc) {
 		int rtChoice = -1;
 		Room.RoomType rt = null;
 		do {
@@ -161,7 +170,7 @@ public class RoomMgr {
 	/*
 	 * This method returns the bed type based on user's input
 	 */
-	private Room.BedType selectBedType() {
+	private Room.BedType selectBedType(Scanner sc) {
 		int btChoice = -1;
 		Room.BedType bt = null;
 		do {
@@ -202,7 +211,7 @@ public class RoomMgr {
 	/*
 	 * This method returns the availability status based on user's input
 	 */
-	private Room.AvailabilityStatus selectAvailStatus() {
+	private Room.AvailabilityStatus selectAvailStatus(Scanner sc) {
 		int asChoice = -1;
 		Room.AvailabilityStatus as = null;
 		
@@ -248,7 +257,7 @@ public class RoomMgr {
 	 * Returns true if wifi is enabled
 	 * Returns false if wifi is not enabled
 	 */
-	private boolean selectWifiOption() {
+	private boolean selectWifiOption(Scanner sc) {
 		int wChoice = -1;
 		boolean wifiEnabled = false;
 		
@@ -287,7 +296,7 @@ public class RoomMgr {
 	 * Returns true if smoking is allowed
 	 * Returns false if smoking is not allowed
 	 */
-	private boolean selectSmokingOption() {
+	private boolean selectSmokingOption(Scanner sc) {
 		int sChoice = -1;
 		boolean smokingAllowed = false;
 		
@@ -381,12 +390,12 @@ public class RoomMgr {
 		int rLevel = -1, rNumber = -1;
 		Room r = null;
 		
-		rt = selectRoomType();
-		bt = selectBedType();
+		rt = selectRoomType(sc);
+		bt = selectBedType(sc);
 		float rate = determineRate(rt, bt);
-		as = selectAvailStatus();
-		wifiEnabled = selectWifiOption();
-		smokingAllowed = selectSmokingOption();
+		as = selectAvailStatus(sc);
+		wifiEnabled = selectWifiOption(sc);
+		smokingAllowed = selectSmokingOption(sc);
 		System.out.print("Facing: ");
 		String facing = sc.nextLine();
 		
@@ -450,12 +459,12 @@ public class RoomMgr {
 						printRoomDetails(r);
 						break;
 					case 1:
-						r.setRoomType(selectRoomType());
+						r.setRoomType(selectRoomType(sc));
 						System.out.println("New room type set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 2:
-						r.setBedType(selectBedType());
+						r.setBedType(selectBedType(sc));
 						System.out.println("New bed type set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
@@ -467,7 +476,7 @@ public class RoomMgr {
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 4:
-						r.setAvailabilityStatus(selectAvailStatus());
+						r.setAvailabilityStatus(selectAvailStatus(sc));
 						System.out.println("New availability status set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
@@ -478,27 +487,27 @@ public class RoomMgr {
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 6:
-						r.setWifiEnabled(selectWifiOption());
+						r.setWifiEnabled(selectWifiOption(sc));
 						System.out.println("New wifi option set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 7:
-						r.setSmokingAllowed(selectSmokingOption());
+						r.setSmokingAllowed(selectSmokingOption(sc));
 						System.out.println("New smoking option set");
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						break;
 					case 8:
-						r.setRoomType(selectRoomType());
-						r.setBedType(selectBedType());
+						r.setRoomType(selectRoomType(sc));
+						r.setBedType(selectBedType(sc));
 						System.out.print("Enter rate: ");
 						rate = validateRate(rate, "Enter rate: ");
 						r.setRate(rate);
-						r.setAvailabilityStatus(selectAvailStatus());
+						r.setAvailabilityStatus(selectAvailStatus(sc));
 						System.out.print("Enter facing: ");
 						r.setFacing(sc.nextLine());
 						System.out.println("New facing set");
-						r.setWifiEnabled(selectWifiOption());
-						r.setSmokingAllowed(selectSmokingOption());
+						r.setWifiEnabled(selectWifiOption(sc));
+						r.setSmokingAllowed(selectSmokingOption(sc));
 						fileIO.writeObject(roomList.toArray(), Room.class);
 						System.out.println("Room updated\n\nThe new room details are:");
 						printRoomDetails(r);
@@ -567,6 +576,20 @@ public class RoomMgr {
 		return r;
 	}	
 
+<<<<<<< HEAD:src/hrps/RoomMgr.java
+=======
+	/*
+	 * This method changes the availability status of 2 rooms
+	 * newRoom gets oldRoom status
+	 * oldRoom status = Vacant
+	 * Used when guest changes room
+	 */
+	public void changeRoom(Room oldRoom, Room newRoom) {
+		newRoom.setAvailabilityStatus(oldRoom.getAvailabilityStatus());
+		oldRoom.setAvailabilityStatus(Room.AvailabilityStatus.VACANT);
+	}
+
+>>>>>>> b3eb5b1210ece8de6499b59808c00fa2f142987d:src/hrps/control/RoomMgr.java
 	/*
 	 * This method returns the room based on the room id
 	 * Used in ReservationMgr to set the room object
@@ -593,6 +616,10 @@ public class RoomMgr {
 		}
 	}
 
+<<<<<<< HEAD:src/hrps/RoomMgr.java
+=======
+	
+>>>>>>> b3eb5b1210ece8de6499b59808c00fa2f142987d:src/hrps/control/RoomMgr.java
 	/*
 	 * This method writes the roomList to file
 	 * Mainly used when other class needs room to update the file

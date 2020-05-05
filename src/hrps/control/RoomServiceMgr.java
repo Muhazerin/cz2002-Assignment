@@ -1,7 +1,11 @@
-package hrps;
+package control;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import entity.MenuItem;
+import entity.RoomService;
+
 import java.util.Objects;
 
 public class RoomServiceMgr {

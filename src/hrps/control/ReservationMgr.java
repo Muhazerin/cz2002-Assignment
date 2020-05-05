@@ -1,10 +1,18 @@
-package hrps;
+package control;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
+<<<<<<< HEAD:src/hrps/ReservationMgr.java
 import hrps.Reservation.ResStatus;
+=======
+import entity.Guest;
+import entity.Reservation;
+import entity.Room;
+import entity.RoomService;
+import entity.Reservation.ResStatus;
+>>>>>>> b3eb5b1210ece8de6499b59808c00fa2f142987d:src/hrps/control/ReservationMgr.java
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
