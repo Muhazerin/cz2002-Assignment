@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import hrps.RoomService.OrderType;
-
 import java.io.Serializable;
 
 public class Reservation implements Serializable{

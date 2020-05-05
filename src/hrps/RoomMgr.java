@@ -23,7 +23,7 @@ public class RoomMgr {
 		roomList = new ArrayList<Room>();
 		this.sc = sc;
 		
-		//re-creates the rooms and writes it back to the file
+		//re-creates the rooms and writes it back to the file if the file is empty
 		Object[] objArray = fileIO.readObject(Room.class);
 		
 		if(objArray.length == 0) {
@@ -70,18 +70,6 @@ public class RoomMgr {
 			}
 			counter = roomList.size() + 1;
 		}
-<<<<<<< HEAD
-		fileIO.writeObject(roomList.toArray(), Room.class);*/
-		
-		Object[] objArray = fileIO.readObject(Room.class);
-		for (Object o : objArray) {
-			Room r = (Room) o;
-			roomList.add(r);
-		}
-		counter = roomList.size() + 1;
-=======
-
->>>>>>> c0d524c0a755c4d668e6afbfc37260ac445a8885
 	}
 	
 	/*
@@ -579,17 +567,6 @@ public class RoomMgr {
 		return r;
 	}	
 
-//	/*
-//	 * This method changes the availability status of 2 rooms
-//	 * newRoom gets oldRoom status
-//	 * oldRoom status = Vacant
-//	 * Used when guest changes room
-//	 */
-//	public void changeRoom(Room oldRoom, Room newRoom) {
-//		newRoom.setAvailabilityStatus(oldRoom.getAvailabilityStatus());
-//		oldRoom.setAvailabilityStatus(Room.AvailabilityStatus.VACANT);
-//	}
-
 	/*
 	 * This method returns the room based on the room id
 	 * Used in ReservationMgr to set the room object
@@ -616,7 +593,6 @@ public class RoomMgr {
 		}
 	}
 
-	
 	/*
 	 * This method writes the roomList to file
 	 * Mainly used when other class needs room to update the file
